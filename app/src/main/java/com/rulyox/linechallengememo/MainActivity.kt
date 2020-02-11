@@ -2,41 +2,23 @@ package com.rulyox.linechallengememo
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
+import android.view.View
 
 import androidx.appcompat.app.AppCompatActivity
 
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
-import com.rulyox.linechallengememo.data.AppDatabase
+import com.rulyox.linechallengememo.data.AppRepository
 import com.rulyox.linechallengememo.data.Memo
 
 class MainActivity : AppCompatActivity() {
-
-    private var appDatabase: AppDatabase? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        appDatabase = AppDatabase.getInstance(this)
-
         setUI()
-
-        GlobalScope.launch(Dispatchers.Main) {
-
-            val testItem = Memo(null, "title", "text", "thumb")
-
-            appDatabase!!.memoDao().insert(testItem)
-
-            val testList: List<Memo> = appDatabase!!.memoDao().getAll()
-
-            Toast.makeText(this@MainActivity, testList[0].text, Toast.LENGTH_LONG).show()
-
-        }
+        getMemoList()
 
     }
 
@@ -48,6 +30,28 @@ class MainActivity : AppCompatActivity() {
             startActivity(writeIntent)
 
         }
+
+    }
+
+    private fun getMemoList() {
+
+        val appRepository = AppRepository(application)
+
+        val memoList: List<Memo> = appRepository.getAllMemo()
+        val memoNum: Int = appRepository.getAllMemo().size
+
+        if(memoNum > 0) {
+
+            main_text_empty.visibility = View.GONE
+
+        } else {
+
+            main_text_empty.visibility = View.VISIBLE
+
+        }
+
+        val testItem = Memo(null, "TITLE", "TEXT", "THUMB")
+        appRepository.addMemo(testItem)
 
     }
 

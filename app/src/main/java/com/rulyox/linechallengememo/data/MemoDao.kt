@@ -9,7 +9,10 @@ import androidx.room.Query
 interface MemoDao {
 
     @Query("SELECT * FROM memo")
-    suspend fun getAll(): List<Memo>
+    suspend fun selectAll(): List<Memo>
+
+    @Query("SELECT * FROM memo WHERE id = :id")
+    suspend fun selectById(id: Int): Memo
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(entity: Memo)
