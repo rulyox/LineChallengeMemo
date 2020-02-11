@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme.AppBarOverlay" >
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/write_toolbar"
+            android:id="@+id/read_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
@@ -22,7 +22,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/write_label"
+                android:text="@string/read_label"
                 android:fontFamily="@font/nanum_gothic_bold"
                 android:textSize="17sp"
                 android:textColor="@color/colorWhite" />
@@ -39,7 +39,7 @@
         android:orientation="vertical" >
 
         <EditText
-            android:id="@+id/write_edit_title"
+            android:id="@+id/read_edit_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
@@ -52,7 +52,7 @@
             android:importantForAutofill="no" />
 
         <EditText
-            android:id="@+id/write_edit_text"
+            android:id="@+id/read_edit_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="10dp"
@@ -66,7 +66,7 @@
     </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/write_navigation_image"
+        android:id="@+id/read_navigation_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#EAEAEA"

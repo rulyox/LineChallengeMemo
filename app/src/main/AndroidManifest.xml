@@ -24,6 +24,10 @@
             android:name=".WriteActivity"
             android:label="@string/write_label"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ReadActivity"
+            android:label="@string/read_label"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

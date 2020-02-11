@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -16,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import com.rulyox.linechallengememo.data.AppRepository
 import com.rulyox.linechallengememo.data.Memo
 
-class MainActivity : AppCompatActivity() {
+class MainActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,9 +88,12 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun clicked(position: Int) {
+    // onclick recycler view item
+    fun memoClicked(id: Int) {
 
-        Toast.makeText(this@MainActivity, position.toString(), Toast.LENGTH_LONG).show()
+        val readIntent = Intent(this@MainActivity, ReadActivity::class.java)
+        readIntent.putExtra("id", id)
+        startActivity(readIntent)
 
     }
 

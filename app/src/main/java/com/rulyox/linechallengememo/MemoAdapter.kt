@@ -26,7 +26,7 @@ class MemoAdapter(private val list: List<Memo>, context: Context): RecyclerView.
         val thumb: ImageView = view.findViewById(R.id.item_thumb)
 
         init {
-            parent.setOnClickListener { (context as MainActivity).clicked(adapterPosition) }
+            parent.setOnClickListener { (context as MainActivity).memoClicked(list[adapterPosition].id!!) }
         }
 
     }

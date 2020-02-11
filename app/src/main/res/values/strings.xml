@@ -4,10 +4,12 @@
     <string name="main_no_memo">There are no memos.</string>
     <string name="menu_search">Search</string>
     <string name="menu_save">Save</string>
+    <string name="menu_delete">Delete</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_camera">Camera</string>
     <string name="menu_url" translatable="false">URL</string>
     <string name="write_label">New Memo</string>
     <string name="write_title_hint">Write title here.</string>
     <string name="write_text_hint">Write text here.</string>
+    <string name="read_label">Memo</string>
 </resources>
