@@ -44,6 +44,9 @@ class MainActivity : AppCompatActivity() {
 
         main_button_add.setOnClickListener {
 
+            val writeIntent = Intent(this@MainActivity, WriteActivity::class.java)
+            startActivity(writeIntent)
+
         }
 
     }

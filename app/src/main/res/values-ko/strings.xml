@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">LineChallengeMemo</string>
+    <string name="app_name">Line Challenge Memo</string>
     <string name="main_no_memo">메모가 없습니다.</string>
+    <string name="write_label">새 메모</string>
+    <string name="write_title_hint">여기에 제목을 쓰세요.</string>
+    <string name="write_text_hint">여기에 본문을 쓰세요.</string>
 </resources>
