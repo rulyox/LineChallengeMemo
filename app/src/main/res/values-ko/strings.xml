@@ -4,6 +4,7 @@
     <string name="main_no_memo">메모가 없습니다.</string>
     <string name="menu_search">검색</string>
     <string name="write_label">새 메모</string>
+    <string name="menu_save">저장</string>
     <string name="write_title_hint">여기에 제목을 쓰세요.</string>
     <string name="write_text_hint">여기에 본문을 쓰세요.</string>
 </resources>

@@ -1,10 +1,10 @@
 package com.rulyox.linechallengememo
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NavUtils
 
 import kotlinx.android.synthetic.main.activity_write.*
 
@@ -19,15 +19,21 @@ class WriteActivity : AppCompatActivity() {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_write, menu)
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-
             android.R.id.home -> {
-                NavUtils.navigateUpFromSameTask(this)
+                finish()
+                true
+            }
+            R.id.write_menu_save -> {
                 true
             }
             else -> super.onOptionsItemSelected(item)
-
         }
     }
 

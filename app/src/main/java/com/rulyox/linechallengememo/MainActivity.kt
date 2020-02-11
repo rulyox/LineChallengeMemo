@@ -35,9 +35,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id: Int = item.itemId
-        return if (id == R.id.main_menu_search) true
-        else super.onOptionsItemSelected(item)
+        return when (item.itemId) {
+            R.id.main_menu_search -> {
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun setUI() {
