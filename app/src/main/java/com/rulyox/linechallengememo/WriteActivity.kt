@@ -2,16 +2,20 @@ package com.rulyox.linechallengememo
 
 import android.os.Bundle
 import android.view.MenuItem
+
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NavUtils
 
+import kotlinx.android.synthetic.main.activity_write.*
 
 class WriteActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_write)
-        actionBar?.setDisplayHomeAsUpEnabled(true)
+        setSupportActionBar(write_toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
     }
 

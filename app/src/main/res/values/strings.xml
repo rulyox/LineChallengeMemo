@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Line Challenge Memo</string>
     <string name="main_no_memo">There are no memos.</string>
+    <string name="menu_search">Search</string>
     <string name="write_label">New Memo</string>
     <string name="write_title_hint">Write title here.</string>
     <string name="write_text_hint">Write text here.</string>
