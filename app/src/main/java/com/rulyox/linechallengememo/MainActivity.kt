@@ -3,8 +3,11 @@ package com.rulyox.linechallengememo
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -24,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUI() {
 
+        // add button
         main_button_add.setOnClickListener {
 
             val writeIntent = Intent(this@MainActivity, WriteActivity::class.java)
@@ -31,11 +35,19 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        // recycler view
+        main_recycler_memo.layoutManager = LinearLayoutManager(this)
+        main_recycler_memo.addItemDecoration(DividerItemDecoration(main_recycler_memo.context, DividerItemDecoration.VERTICAL))
+
     }
 
     private fun getMemoList() {
 
         val appRepository = AppRepository(application)
+
+        // add item for test
+        val testItem = Memo(null, "TITLE", "TEXT", "THUMB")
+        appRepository.addMemo(testItem)
 
         val memoList: List<Memo> = appRepository.getAllMemo()
         val memoNum: Int = appRepository.getAllMemo().size
@@ -43,15 +55,25 @@ class MainActivity : AppCompatActivity() {
         if(memoNum > 0) {
 
             main_text_empty.visibility = View.GONE
+            main_recycler_memo.visibility = View.VISIBLE
 
         } else {
 
             main_text_empty.visibility = View.VISIBLE
+            main_recycler_memo.visibility = View.GONE
 
         }
 
-        val testItem = Memo(null, "TITLE", "TEXT", "THUMB")
-        appRepository.addMemo(testItem)
+        // recycler view adapter
+        val memoAdapter = MemoAdapter(memoList, this)
+        main_recycler_memo.adapter = memoAdapter
+        memoAdapter.notifyDataSetChanged()
+
+    }
+
+    fun clicked(position: Int) {
+
+        Toast.makeText(this@MainActivity, position.toString(), Toast.LENGTH_LONG).show()
 
     }
 
