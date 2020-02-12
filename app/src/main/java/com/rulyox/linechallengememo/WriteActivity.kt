@@ -108,8 +108,8 @@ class WriteActivity: AppCompatActivity() {
         val newId: Int = appRepository.addMemo(newMemo).toInt()
 
         // save images
-        for(imgDrawable in imageList) {
-            val imgPath = saveDrawable(imgDrawable)
+        for((index, imgDrawable) in imageList.withIndex()) {
+            val imgPath = saveDrawable(imgDrawable, newId, index)
             val newImage = Image(null, newId, imgPath)
             appRepository.addImage(newImage)
         }
@@ -141,9 +141,9 @@ class WriteActivity: AppCompatActivity() {
 
         val imgUri: Uri = data.data!!
         val imgStream: InputStream = contentResolver.openInputStream(imgUri)!!
-
         val imgDrawable: Drawable = Drawable.createFromStream(imgStream, imgUri.toString())
         imageList.add(imgDrawable)
+        imgStream.close()
 
         updateRecycler()
 
@@ -157,16 +157,17 @@ class WriteActivity: AppCompatActivity() {
 
     }
 
-    private fun saveDrawable(imgDrawable: Drawable): String {
+    private fun saveDrawable(imgDrawable: Drawable, memoId: Int, index: Int): String {
 
         val imgBmp: Bitmap = (imgDrawable as BitmapDrawable).bitmap
 
         val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val imgFile = File.createTempFile("image_", ".jpg", imgDir)
+        val imgFile = File(imgDir, "image_${memoId}_${index}.jpg")
         val imgPath: String = imgFile.absolutePath
 
         val fileStream = FileOutputStream(imgPath)
         imgBmp.compress(Bitmap.CompressFormat.JPEG, 100, fileStream)
+        fileStream.close()
 
         return imgPath
 
