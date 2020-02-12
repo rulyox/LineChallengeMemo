@@ -14,7 +14,7 @@ import java.lang.ref.WeakReference
 
 import com.rulyox.linechallengememo.data.Memo
 
-class MemoAdapter(private val list: List<Memo>, context: Context): RecyclerView.Adapter<MemoAdapter.CustomViewHolder?>() {
+class MemoAdapter(private val memoList: List<Memo>, context: Context): RecyclerView.Adapter<MemoAdapter.CustomViewHolder?>() {
 
     private val mContextWeakReference = WeakReference(context)
 
@@ -26,7 +26,7 @@ class MemoAdapter(private val list: List<Memo>, context: Context): RecyclerView.
         val thumb: ImageView = view.findViewById(R.id.item_thumb)
 
         init {
-            parent.setOnClickListener { (context as MainActivity).memoClicked(list[adapterPosition].id!!) }
+            parent.setOnClickListener { (context as MainActivity).memoClicked(memoList[adapterPosition].id!!) }
         }
 
     }
@@ -42,11 +42,11 @@ class MemoAdapter(private val list: List<Memo>, context: Context): RecyclerView.
 
     override fun onBindViewHolder(viewholder: CustomViewHolder, position: Int) {
 
-        viewholder.title.text = list[position].title
-        viewholder.text.text = list[position].text
+        viewholder.title.text = memoList[position].title
+        viewholder.text.text = memoList[position].text
 
     }
 
-    override fun getItemCount(): Int { return list.size }
+    override fun getItemCount(): Int { return memoList.size }
 
 }

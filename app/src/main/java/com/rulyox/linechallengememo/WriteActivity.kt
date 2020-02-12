@@ -2,23 +2,34 @@ package com.rulyox.linechallengememo
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import android.net.Uri
+import android.os.Environment
+import android.graphics.drawable.BitmapDrawable
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
+
+import kotlinx.android.synthetic.main.activity_write.*
 
 import com.rulyox.linechallengememo.data.AppRepository
 import com.rulyox.linechallengememo.data.Image
 import com.rulyox.linechallengememo.data.Memo
 
-import kotlinx.android.synthetic.main.activity_write.*
-
 class WriteActivity: AppCompatActivity() {
 
-    var imageList: MutableList<String> = mutableListOf()
+    private var imageList: MutableList<Drawable> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +62,17 @@ class WriteActivity: AppCompatActivity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(resultCode == Activity.RESULT_OK) {
+
+            if(requestCode == 1) { gotImageGallery(data!!) }
+
+        }
+
+    }
+
     private fun initUI() {
 
         write_navigation_image.setOnNavigationItemSelectedListener { item ->
@@ -61,6 +83,9 @@ class WriteActivity: AppCompatActivity() {
             }
             true
         }
+
+        // recycler view
+        write_recycler_image.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
 
     }
 
@@ -83,8 +108,9 @@ class WriteActivity: AppCompatActivity() {
         val newId: Int = appRepository.addMemo(newMemo).toInt()
 
         // save images
-        for(imagePath in imageList) {
-            val newImage = Image(null, newId, imagePath)
+        for(imgDrawable in imageList) {
+            val imgPath = saveDrawable(imgDrawable)
+            val newImage = Image(null, newId, imgPath)
             appRepository.addImage(newImage)
         }
 
@@ -95,10 +121,54 @@ class WriteActivity: AppCompatActivity() {
     private fun addImage(type: String) {
 
         when(type) {
-            "gallery" -> { }
+            "gallery" -> { getImageGallery() }
         }
 
         write_recycler_image.visibility = View.VISIBLE
+
+    }
+
+    private fun getImageGallery() {
+
+        val pickIntent = Intent(Intent.ACTION_GET_CONTENT)
+        pickIntent.type = "image/*"
+
+        startActivityForResult(pickIntent, 1)
+
+    }
+
+    private fun gotImageGallery(data: Intent) {
+
+        val imgUri: Uri = data.data!!
+        val imgStream: InputStream = contentResolver.openInputStream(imgUri)!!
+
+        val imgDrawable: Drawable = Drawable.createFromStream(imgStream, imgUri.toString())
+        imageList.add(imgDrawable)
+
+        updateRecycler()
+
+    }
+
+    private fun updateRecycler() {
+
+        val imageAdapter = ImageAdapter(imageList, this)
+        write_recycler_image.adapter = imageAdapter
+        imageAdapter.notifyDataSetChanged()
+
+    }
+
+    private fun saveDrawable(imgDrawable: Drawable): String {
+
+        val imgBmp: Bitmap = (imgDrawable as BitmapDrawable).bitmap
+
+        val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val imgFile = File.createTempFile("image_", ".jpg", imgDir)
+        val imgPath: String = imgFile.absolutePath
+
+        val fileStream = FileOutputStream(imgPath)
+        imgBmp.compress(Bitmap.CompressFormat.JPEG, 100, fileStream)
+
+        return imgPath
 
     }
 
