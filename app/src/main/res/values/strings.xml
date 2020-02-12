@@ -4,6 +4,7 @@
     <string name="main_no_memo">There are no memos.</string>
     <string name="menu_search">Search</string>
     <string name="menu_save">Save</string>
+    <string name="menu_edit">Edit</string>
     <string name="menu_delete">Delete</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_camera">Camera</string>
@@ -13,4 +14,5 @@
     <string name="write_text_hint">Write text here.</string>
     <string name="write_saved">Memo saved.</string>
     <string name="read_label">Memo</string>
+    <string name="read_deleted">Memo deleted.</string>
 </resources>

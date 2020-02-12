@@ -45,7 +45,9 @@ class MainActivity: AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == 1) getMemoList()
+        val doRefresh = data?.getBooleanExtra("refresh", false)
+
+        if(doRefresh != null && doRefresh) getMemoList()
 
     }
 
@@ -96,7 +98,7 @@ class MainActivity: AppCompatActivity() {
 
         val readIntent = Intent(this@MainActivity, ReadActivity::class.java)
         readIntent.putExtra("id", id)
-        startActivity(readIntent)
+        startActivityForResult(readIntent, 2)
 
     }
 

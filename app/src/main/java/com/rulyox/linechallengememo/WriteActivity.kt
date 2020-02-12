@@ -1,5 +1,7 @@
 package com.rulyox.linechallengememo
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -21,6 +23,8 @@ class WriteActivity: AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        initUI()
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -36,18 +40,46 @@ class WriteActivity: AppCompatActivity() {
             }
             R.id.write_menu_save -> {
 
-                val appRepository = AppRepository(application)
-                val newMemo = Memo(null, write_edit_title.text.toString(), write_edit_text.text.toString(), null)
-                appRepository.addMemo(newMemo)
+                saveMemo()
 
-                Toast.makeText(this@WriteActivity, R.string.write_saved, Toast.LENGTH_SHORT).show()
-
+                val finishIntent = Intent()
+                finishIntent.putExtra("refresh", true)
+                setResult(Activity.RESULT_OK, finishIntent)
                 finish()
+
                 true
 
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun initUI() {
+
+        write_navigation_image.setOnNavigationItemSelectedListener { item ->
+            when(item.itemId) {
+                R.id.write_menu_gallery -> { addImage("gallery") }
+                R.id.write_menu_camera -> { addImage("camera") }
+                R.id.write_menu_url -> { addImage("url") }
+            }
+            true
+        }
+
+    }
+
+    private fun saveMemo() {
+
+        val appRepository = AppRepository(application)
+
+        val newMemo = Memo(null, write_edit_title.text.toString(), write_edit_text.text.toString(), null)
+        appRepository.addMemo(newMemo)
+
+        Toast.makeText(this@WriteActivity, R.string.write_saved, Toast.LENGTH_SHORT).show()
+
+    }
+
+    private fun addImage(type: String) {
+
     }
 
 }

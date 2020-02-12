@@ -46,6 +46,8 @@
             android:padding="10dp"
             android:background="#EAEAEA"
             android:inputType="text"
+            android:textSize="17sp"
+            android:textColor="#222222"
             android:maxLines="1"
             android:fontFamily="@font/nanum_gothic"
             android:hint="@string/write_title_hint"
@@ -59,6 +61,8 @@
             android:background="#EAEAEA"
             android:gravity="start"
             android:inputType="textMultiLine"
+            android:textSize="17sp"
+            android:textColor="#222222"
             android:fontFamily="@font/nanum_gothic"
             android:hint="@string/write_text_hint"
             android:importantForAutofill="no" />

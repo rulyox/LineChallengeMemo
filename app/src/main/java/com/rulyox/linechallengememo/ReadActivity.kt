@@ -1,5 +1,7 @@
 package com.rulyox.linechallengememo
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.Menu
@@ -40,11 +42,20 @@ class ReadActivity: AppCompatActivity() {
                 finish()
                 true
             }
-            R.id.read_menu_save -> {
+            R.id.read_menu_edit -> {
                 true
             }
             R.id.read_menu_delete -> {
+
+                deleteMemo()
+
+                val finishIntent = Intent()
+                finishIntent.putExtra("refresh", true)
+                setResult(Activity.RESULT_OK, finishIntent)
+                finish()
+
                 true
+
             }
             else -> super.onOptionsItemSelected(item)
         }
@@ -56,8 +67,19 @@ class ReadActivity: AppCompatActivity() {
 
         val memo: Memo = appRepository.getMemoById(memoId)
 
-        read_edit_title.text = SpannableStringBuilder(memo.title)
-        read_edit_text.text = SpannableStringBuilder(memo.text)
+        read_edit_title.text = memo.title
+        read_edit_text.text = memo.text
+
+    }
+
+    private fun deleteMemo() {
+
+        val appRepository = AppRepository(application)
+
+        val memo: Memo = appRepository.getMemoById(memoId)
+        appRepository.deleteMemo(memo)
+
+        Toast.makeText(this@ReadActivity, R.string.read_deleted, Toast.LENGTH_SHORT).show()
 
     }
 

@@ -15,4 +15,6 @@ class AppRepository(application: Application) {
 
     fun addMemo(memo: Memo) = runBlocking { memoDao.insert(memo) }
 
+    fun deleteMemo(memo: Memo) = runBlocking { memoDao.delete(memo) }
+
 }

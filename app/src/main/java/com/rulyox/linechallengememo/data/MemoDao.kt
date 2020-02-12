@@ -1,9 +1,6 @@
 package com.rulyox.linechallengememo.data
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface MemoDao {
@@ -14,7 +11,10 @@ interface MemoDao {
     @Query("SELECT * FROM memo WHERE id = :id")
     suspend fun selectById(id: Int): Memo
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(entity: Memo)
+    @Insert
+    suspend fun insert(memo: Memo)
+
+    @Delete
+    suspend fun delete(memo: Memo)
 
 }
