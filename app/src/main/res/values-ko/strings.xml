@@ -9,5 +9,6 @@
     <string name="write_label">새 메모</string>
     <string name="write_title_hint">여기에 제목을 쓰세요.</string>
     <string name="write_text_hint">여기에 본문을 쓰세요.</string>
+    <string name="write_saved">메모가 저장되었습니다.</string>
     <string name="read_label">메모</string>
 </resources>

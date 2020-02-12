@@ -11,5 +11,6 @@
     <string name="write_label">New Memo</string>
     <string name="write_title_hint">Write title here.</string>
     <string name="write_text_hint">Write text here.</string>
+    <string name="write_saved">Memo saved.</string>
     <string name="read_label">Memo</string>
 </resources>

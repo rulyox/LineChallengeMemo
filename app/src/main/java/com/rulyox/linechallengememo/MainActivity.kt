@@ -23,7 +23,7 @@ class MainActivity: AppCompatActivity() {
         setSupportActionBar(main_toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        setUI()
+        initUI()
         getMemoList()
 
     }
@@ -42,13 +42,20 @@ class MainActivity: AppCompatActivity() {
         }
     }
 
-    private fun setUI() {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == 1) getMemoList()
+
+    }
+
+    private fun initUI() {
 
         // add button
         main_button_add.setOnClickListener {
 
             val writeIntent = Intent(this@MainActivity, WriteActivity::class.java)
-            startActivity(writeIntent)
+            startActivityForResult(writeIntent, 1)
 
         }
 
@@ -61,10 +68,6 @@ class MainActivity: AppCompatActivity() {
     private fun getMemoList() {
 
         val appRepository = AppRepository(application)
-
-        // add item for test
-        val testItem = Memo(null, "TITLE", "TEXT", "THUMB")
-        appRepository.addMemo(testItem)
 
         val memoList: List<Memo> = appRepository.getAllMemo()
         val memoNum: Int = appRepository.getAllMemo().size
