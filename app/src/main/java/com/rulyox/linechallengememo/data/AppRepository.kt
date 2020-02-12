@@ -8,13 +8,16 @@ class AppRepository(application: Application) {
 
     private val database = AppDatabase.getInstance(application)
     private val memoDao = database.memoDao()
+    private val imageDao = database.imageDao()
 
     fun getAllMemo(): List<Memo> = runBlocking { memoDao.selectAll() }
 
     fun getMemoById(id: Int): Memo = runBlocking { memoDao.selectById(id) }
 
-    fun addMemo(memo: Memo) = runBlocking { memoDao.insert(memo) }
+    fun addMemo(memo: Memo): Long = runBlocking { memoDao.insert(memo) }
 
     fun deleteMemo(memo: Memo) = runBlocking { memoDao.delete(memo) }
+
+    fun addImage(image: Image) = runBlocking { imageDao.insert(image) }
 
 }

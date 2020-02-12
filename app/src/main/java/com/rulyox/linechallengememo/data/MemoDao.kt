@@ -12,7 +12,7 @@ interface MemoDao {
     suspend fun selectById(id: Int): Memo
 
     @Insert
-    suspend fun insert(memo: Memo)
+    suspend fun insert(memo: Memo): Long
 
     @Delete
     suspend fun delete(memo: Memo)

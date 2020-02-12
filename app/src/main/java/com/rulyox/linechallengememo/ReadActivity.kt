@@ -46,16 +46,9 @@ class ReadActivity: AppCompatActivity() {
                 true
             }
             R.id.read_menu_delete -> {
-
                 deleteMemo()
-
-                val finishIntent = Intent()
-                finishIntent.putExtra("refresh", true)
-                setResult(Activity.RESULT_OK, finishIntent)
-                finish()
-
+                finishAndRefresh()
                 true
-
             }
             else -> super.onOptionsItemSelected(item)
         }
@@ -69,6 +62,16 @@ class ReadActivity: AppCompatActivity() {
 
         read_edit_title.text = memo.title
         read_edit_text.text = memo.text
+
+    }
+
+    private fun finishAndRefresh() {
+
+        val finishIntent = Intent()
+        finishIntent.putExtra("refresh", true)
+        setResult(Activity.RESULT_OK, finishIntent)
+
+        finish()
 
     }
 
