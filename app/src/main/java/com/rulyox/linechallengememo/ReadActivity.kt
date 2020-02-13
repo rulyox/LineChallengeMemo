@@ -2,17 +2,24 @@ package com.rulyox.linechallengememo
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.text.SpannableStringBuilder
+import android.os.Environment
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 
 import androidx.appcompat.app.AppCompatActivity
-import com.rulyox.linechallengememo.data.AppRepository
-import com.rulyox.linechallengememo.data.Memo
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+
+import java.io.File
 
 import kotlinx.android.synthetic.main.activity_read.*
+
+import com.rulyox.linechallengememo.data.AppRepository
+import com.rulyox.linechallengememo.data.Memo
 
 class ReadActivity: AppCompatActivity() {
 
@@ -27,6 +34,7 @@ class ReadActivity: AppCompatActivity() {
 
         memoId = intent.getIntExtra("id", -1)
 
+        initUI()
         getMemoData()
 
     }
@@ -54,6 +62,13 @@ class ReadActivity: AppCompatActivity() {
         }
     }
 
+    private fun initUI() {
+
+        // recycler view
+        read_recycler_image.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+
+    }
+
     private fun getMemoData() {
 
         val appRepository = AppRepository(application)
@@ -62,6 +77,41 @@ class ReadActivity: AppCompatActivity() {
 
         read_edit_title.text = memo.title
         read_edit_text.text = memo.text
+
+        val imageList: List<String> = appRepository.getImageByMemo(memoId)
+
+        if(imageList.isNotEmpty()) {
+
+            read_recycler_image.visibility = View.VISIBLE
+
+            val imgList: MutableList<Drawable> = mutableListOf()
+
+            val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+            // get drawables from files
+            for(imgName in imageList) {
+
+                val imgFile = File(imgDir, imgName)
+
+                if(imgFile.exists()) {
+
+                    val imgPath: String = imgFile.absolutePath
+
+                    val imgDrawable: Drawable = Drawable.createFromPath(imgPath)!!
+                    imgList.add(imgDrawable)
+
+                } else {
+
+                }
+
+            }
+
+            // recycler view adapter
+            val imageAdapter = ImageAdapter(imgList, this)
+            read_recycler_image.adapter = imageAdapter
+            imageAdapter.notifyDataSetChanged()
+
+        }
 
     }
 

@@ -29,7 +29,7 @@ import com.rulyox.linechallengememo.data.Memo
 
 class WriteActivity: AppCompatActivity() {
 
-    private var imageList: MutableList<Drawable> = mutableListOf()
+    private val imageList: MutableList<Drawable> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,8 +110,8 @@ class WriteActivity: AppCompatActivity() {
         // save images
         for((index, imgDrawable) in imageList.withIndex()) {
 
-            val imgPath = saveDrawable(imgDrawable, newId, index)
-            val newImage = Image(null, newId, imgPath)
+            val imgName = saveDrawable(imgDrawable, newId, index)
+            val newImage = Image(null, newId, imgName)
             appRepository.addImage(newImage)
 
         }
@@ -120,7 +120,7 @@ class WriteActivity: AppCompatActivity() {
         if(imageList.size > 0) {
 
             val thumbName = "image_thumbnail_${newId}.jpg"
-            val thumbSize = 80
+            val thumbSize = 300
 
             val imgBmp: Bitmap = (imageList[0] as BitmapDrawable).bitmap
 
@@ -155,17 +155,19 @@ class WriteActivity: AppCompatActivity() {
 
     private fun saveDrawable(imgDrawable: Drawable, memoId: Int, index: Int): String {
 
+        val imgName = "image_${memoId}_${index}.jpg"
+
         val imgBmp: Bitmap = (imgDrawable as BitmapDrawable).bitmap
 
         val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val imgFile = File(imgDir, "image_${memoId}_${index}.jpg")
+        val imgFile = File(imgDir, imgName)
         val imgPath: String = imgFile.absolutePath
 
         val fileStream = FileOutputStream(imgPath)
         imgBmp.compress(Bitmap.CompressFormat.JPEG, 100, fileStream)
         fileStream.close()
 
-        return imgPath
+        return imgName
 
     }
 

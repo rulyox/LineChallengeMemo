@@ -1,6 +1,7 @@
 package com.rulyox.linechallengememo
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Environment
 import android.view.LayoutInflater
@@ -62,7 +63,7 @@ class MemoAdapter(private val memoList: List<Memo>, context: Context): RecyclerV
 
                 val imgPath: String = imgFile.absolutePath
 
-                val thumbBmp = BitmapFactory.decodeFile(imgPath)
+                val thumbBmp: Bitmap = BitmapFactory.decodeFile(imgPath)
                 viewholder.thumb.setImageBitmap(thumbBmp)
 
             } else {

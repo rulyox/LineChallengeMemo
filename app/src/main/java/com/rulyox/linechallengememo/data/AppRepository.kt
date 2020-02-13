@@ -22,4 +22,6 @@ class AppRepository(application: Application) {
 
     fun addImage(image: Image) = runBlocking { imageDao.insert(image) }
 
+    fun getImageByMemo(memoId: Int) = runBlocking { imageDao.selectImageByMemo(memoId) }
+
 }
