@@ -17,4 +17,7 @@ interface MemoDao {
     @Delete
     suspend fun delete(memo: Memo)
 
+    @Query("UPDATE memo SET thumbnail = :thumbnail WHERE id = :id")
+    suspend fun updateThumbnail(id: Int, thumbnail: String?)
+
 }

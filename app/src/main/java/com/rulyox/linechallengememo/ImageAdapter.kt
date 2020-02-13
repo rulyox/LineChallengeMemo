@@ -2,6 +2,7 @@ package com.rulyox.linechallengememo
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,7 @@ import java.lang.ref.WeakReference
 
 class ImageAdapter(private val drawableList: List<Drawable>, context: Context): RecyclerView.Adapter<ImageAdapter.CustomViewHolder?>() {
 
-    private val mContextWeakReference = WeakReference(context)
+    private val contextWeakReference = WeakReference(context)
 
     inner class CustomViewHolder(view: View, context: Context): RecyclerView.ViewHolder(view) {
 
@@ -25,7 +26,7 @@ class ImageAdapter(private val drawableList: List<Drawable>, context: Context): 
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): CustomViewHolder {
 
-        val context: Context = mContextWeakReference.get()!!
+        val context: Context = contextWeakReference.get()!!
         val view: View = LayoutInflater.from(viewGroup.context).inflate(R.layout.item_image, viewGroup, false)
 
         return CustomViewHolder(view, context)
@@ -34,7 +35,14 @@ class ImageAdapter(private val drawableList: List<Drawable>, context: Context): 
 
     override fun onBindViewHolder(viewholder: CustomViewHolder, position: Int) {
 
+        val context: Context = contextWeakReference.get()!!
+
         viewholder.image.setImageDrawable(drawableList[position])
+
+        // image view round corners
+        val roundCorner = context.getDrawable(R.drawable.round_corner) as GradientDrawable
+        viewholder.image.background = roundCorner
+        viewholder.image.clipToOutline = true
 
     }
 

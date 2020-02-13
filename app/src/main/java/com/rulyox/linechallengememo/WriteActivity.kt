@@ -77,9 +77,9 @@ class WriteActivity: AppCompatActivity() {
 
         write_navigation_image.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
-                R.id.write_menu_gallery -> { addImage("gallery") }
-                R.id.write_menu_camera -> { addImage("camera") }
-                R.id.write_menu_url -> { addImage("url") }
+                R.id.write_menu_gallery -> { getImageGallery() }
+                R.id.write_menu_camera -> { }
+                R.id.write_menu_url -> { }
             }
             true
         }
@@ -109,22 +109,74 @@ class WriteActivity: AppCompatActivity() {
 
         // save images
         for((index, imgDrawable) in imageList.withIndex()) {
+
             val imgPath = saveDrawable(imgDrawable, newId, index)
             val newImage = Image(null, newId, imgPath)
             appRepository.addImage(newImage)
+
+        }
+
+        // create thumbnail
+        if(imageList.size > 0) {
+
+            val thumbName = "image_thumbnail_${newId}.jpg"
+            val thumbSize = 80
+
+            val imgBmp: Bitmap = (imageList[0] as BitmapDrawable).bitmap
+
+            var imgWidth: Int = imgBmp.width
+            var imgHeight: Int = imgBmp.height
+
+            if(imgWidth > imgHeight) {
+                imgWidth = (imgWidth.toFloat() / imgHeight * thumbSize).toInt()
+                imgHeight = thumbSize
+            } else {
+                imgHeight = (imgHeight.toFloat() / imgWidth * thumbSize).toInt()
+                imgWidth = thumbSize
+            }
+
+            val resizedBmp: Bitmap = Bitmap.createScaledBitmap(imgBmp, imgWidth, imgHeight, false)
+
+            val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            val imgFile = File(imgDir, thumbName)
+            val imgPath: String = imgFile.absolutePath
+
+            val fileStream = FileOutputStream(imgPath)
+            resizedBmp.compress(Bitmap.CompressFormat.JPEG, 100, fileStream)
+            fileStream.close()
+
+            appRepository.updateMemoThumbnail(newId, thumbName)
+
         }
 
         Toast.makeText(this@WriteActivity, R.string.write_saved, Toast.LENGTH_SHORT).show()
 
     }
 
-    private fun addImage(type: String) {
+    private fun saveDrawable(imgDrawable: Drawable, memoId: Int, index: Int): String {
 
-        when(type) {
-            "gallery" -> { getImageGallery() }
-        }
+        val imgBmp: Bitmap = (imgDrawable as BitmapDrawable).bitmap
 
-        write_recycler_image.visibility = View.VISIBLE
+        val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val imgFile = File(imgDir, "image_${memoId}_${index}.jpg")
+        val imgPath: String = imgFile.absolutePath
+
+        val fileStream = FileOutputStream(imgPath)
+        imgBmp.compress(Bitmap.CompressFormat.JPEG, 100, fileStream)
+        fileStream.close()
+
+        return imgPath
+
+    }
+
+    private fun updateRecycler() {
+
+        if(imageList.size > 0) write_recycler_image.visibility = View.VISIBLE
+        else write_recycler_image.visibility = View.GONE
+
+        val imageAdapter = ImageAdapter(imageList, this)
+        write_recycler_image.adapter = imageAdapter
+        imageAdapter.notifyDataSetChanged()
 
     }
 
@@ -146,30 +198,6 @@ class WriteActivity: AppCompatActivity() {
         imgStream.close()
 
         updateRecycler()
-
-    }
-
-    private fun updateRecycler() {
-
-        val imageAdapter = ImageAdapter(imageList, this)
-        write_recycler_image.adapter = imageAdapter
-        imageAdapter.notifyDataSetChanged()
-
-    }
-
-    private fun saveDrawable(imgDrawable: Drawable, memoId: Int, index: Int): String {
-
-        val imgBmp: Bitmap = (imgDrawable as BitmapDrawable).bitmap
-
-        val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val imgFile = File(imgDir, "image_${memoId}_${index}.jpg")
-        val imgPath: String = imgFile.absolutePath
-
-        val fileStream = FileOutputStream(imgPath)
-        imgBmp.compress(Bitmap.CompressFormat.JPEG, 100, fileStream)
-        fileStream.close()
-
-        return imgPath
 
     }
 

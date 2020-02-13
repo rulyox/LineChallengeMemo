@@ -4,23 +4,23 @@
     android:id="@+id/item_parent"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="90dp"
-    android:padding="15dp"
+    android:layout_height="100dp"
+    android:padding="10dp"
     android:foreground="?selectableItemBackground"
     android:clickable="true"
     android:focusable="true" >
 
     <ImageView
         android:id="@+id/item_thumb"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_marginEnd="15dp"
         android:scaleType="centerCrop"
         android:contentDescription="@null"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="80dp"
         android:orientation="vertical"
         android:gravity="center_vertical" >
 
@@ -28,7 +28,7 @@
             android:id="@+id/item_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="15dp"
             android:textSize="17sp"
             android:maxLines="1"
             android:fontFamily="@font/nanum_gothic_bold" />
