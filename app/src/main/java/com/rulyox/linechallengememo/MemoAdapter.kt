@@ -1,5 +1,6 @@
 package com.rulyox.linechallengememo
 
+import android.app.Application
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -18,6 +19,7 @@ import java.lang.ref.WeakReference
 import java.io.File
 
 import com.rulyox.linechallengememo.data.Memo
+import com.rulyox.linechallengememo.data.AppRepository
 
 class MemoAdapter(private val memoList: List<Memo>, context: Context): RecyclerView.Adapter<MemoAdapter.CustomViewHolder?>() {
 
@@ -48,16 +50,19 @@ class MemoAdapter(private val memoList: List<Memo>, context: Context): RecyclerV
     override fun onBindViewHolder(viewholder: CustomViewHolder, position: Int) {
 
         val context: Context = contextWeakReference.get()!!
+        val application: Application = context.applicationContext as Application
 
         viewholder.title.text = memoList[position].title
         viewholder.text.text = memoList[position].text
 
-        val thumbnail: String? = memoList[position].thumbnail
+        val appRepository = AppRepository(application)
+
+        val thumbnail: String? = appRepository.getThumbnailByMemo(memoList[position].id!!)
 
         if(thumbnail != null) {
 
             val imgDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-            val imgFile = File(imgDir, thumbnail)
+            val imgFile = File(imgDir, "${thumbnail}_thumb.jpg")
 
             if(imgFile.exists()) {
 

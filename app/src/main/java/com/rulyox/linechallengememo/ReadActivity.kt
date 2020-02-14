@@ -91,7 +91,7 @@ class ReadActivity: AppCompatActivity() {
             // get drawables from files
             for(imgName in imageList) {
 
-                val imgFile = File(imgDir, imgName)
+                val imgFile = File(imgDir, "${imgName}_thumb.jpg")
 
                 if(imgFile.exists()) {
 
@@ -128,6 +128,21 @@ class ReadActivity: AppCompatActivity() {
     private fun deleteMemo() {
 
         val appRepository = AppRepository(application)
+
+        // delete images
+        val imageList: List<String> = appRepository.getImageByMemo(memoId)
+
+        val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+        for(imgName in imageList) {
+
+            val imgFile = File(imgDir, "${imgName}.jpg")
+            if(imgFile.exists()) imgFile.delete()
+
+            val thumbFile = File(imgDir, "${imgName}_thumb.jpg")
+            if(thumbFile.exists()) thumbFile.delete()
+
+        }
 
         val memo: Memo = appRepository.getMemoById(memoId)
         appRepository.deleteMemo(memo)

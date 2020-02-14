@@ -18,10 +18,10 @@ class AppRepository(application: Application) {
 
     fun deleteMemo(memo: Memo) = runBlocking { memoDao.delete(memo) }
 
-    fun updateMemoThumbnail(id: Int, thumbnail: String?) = runBlocking { memoDao.updateThumbnail(id, thumbnail) }
-
     fun addImage(image: Image) = runBlocking { imageDao.insert(image) }
 
-    fun getImageByMemo(memoId: Int) = runBlocking { imageDao.selectImageByMemo(memoId) }
+    fun getImageByMemo(memoId: Int): List<String> = runBlocking { imageDao.selectImageByMemo(memoId) }
+
+    fun getThumbnailByMemo(memoId: Int): String? = runBlocking { imageDao.selectThumbnailByMemo(memoId) }
 
 }

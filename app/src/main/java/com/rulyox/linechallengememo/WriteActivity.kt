@@ -104,7 +104,7 @@ class WriteActivity: AppCompatActivity() {
         val appRepository = AppRepository(application)
 
         // save memo
-        val newMemo = Memo(null, write_edit_title.text.toString(), write_edit_text.text.toString(), null)
+        val newMemo = Memo(null, write_edit_title.text.toString(), write_edit_text.text.toString())
         val newId: Int = appRepository.addMemo(newMemo).toInt()
 
         // save images
@@ -116,56 +116,46 @@ class WriteActivity: AppCompatActivity() {
 
         }
 
-        // create thumbnail
-        if(imageList.size > 0) {
-
-            val thumbName = "image_thumbnail_${newId}.jpg"
-            val thumbSize = 300
-
-            val imgBmp: Bitmap = (imageList[0] as BitmapDrawable).bitmap
-
-            var imgWidth: Int = imgBmp.width
-            var imgHeight: Int = imgBmp.height
-
-            if(imgWidth > imgHeight) {
-                imgWidth = (imgWidth.toFloat() / imgHeight * thumbSize).toInt()
-                imgHeight = thumbSize
-            } else {
-                imgHeight = (imgHeight.toFloat() / imgWidth * thumbSize).toInt()
-                imgWidth = thumbSize
-            }
-
-            val resizedBmp: Bitmap = Bitmap.createScaledBitmap(imgBmp, imgWidth, imgHeight, false)
-
-            val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-            val imgFile = File(imgDir, thumbName)
-            val imgPath: String = imgFile.absolutePath
-
-            val fileStream = FileOutputStream(imgPath)
-            resizedBmp.compress(Bitmap.CompressFormat.JPEG, 100, fileStream)
-            fileStream.close()
-
-            appRepository.updateMemoThumbnail(newId, thumbName)
-
-        }
-
         Toast.makeText(this@WriteActivity, R.string.write_saved, Toast.LENGTH_SHORT).show()
 
     }
 
     private fun saveDrawable(imgDrawable: Drawable, memoId: Int, index: Int): String {
 
-        val imgName = "image_${memoId}_${index}.jpg"
+        val imgName = "img_${memoId}_${index}"
 
         val imgBmp: Bitmap = (imgDrawable as BitmapDrawable).bitmap
 
         val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val imgFile = File(imgDir, imgName)
+        val imgFile = File(imgDir, "${imgName}.jpg")
         val imgPath: String = imgFile.absolutePath
 
-        val fileStream = FileOutputStream(imgPath)
-        imgBmp.compress(Bitmap.CompressFormat.JPEG, 100, fileStream)
-        fileStream.close()
+        val imgFileStream = FileOutputStream(imgPath)
+        imgBmp.compress(Bitmap.CompressFormat.JPEG, 100, imgFileStream)
+        imgFileStream.close()
+
+        // create thumbnail
+        val thumbSize = 300
+
+        var imgWidth: Int = imgBmp.width
+        var imgHeight: Int = imgBmp.height
+
+        if(imgWidth > imgHeight) {
+            imgWidth = (imgWidth.toFloat() / imgHeight * thumbSize).toInt()
+            imgHeight = thumbSize
+        } else {
+            imgHeight = (imgHeight.toFloat() / imgWidth * thumbSize).toInt()
+            imgWidth = thumbSize
+        }
+
+        val resizedBmp: Bitmap = Bitmap.createScaledBitmap(imgBmp, imgWidth, imgHeight, false)
+
+        val thumbFile = File(imgDir, "${imgName}_thumb.jpg")
+        val thumbPath: String = thumbFile.absolutePath
+
+        val thumbFileStream = FileOutputStream(thumbPath)
+        resizedBmp.compress(Bitmap.CompressFormat.JPEG, 100, thumbFileStream)
+        thumbFileStream.close()
 
         return imgName
 
