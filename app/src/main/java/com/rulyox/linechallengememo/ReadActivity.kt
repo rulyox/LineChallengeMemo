@@ -52,6 +52,9 @@ class ReadActivity: AppCompatActivity() {
                 true
             }
             R.id.read_menu_edit -> {
+                val editIntent = Intent(this@ReadActivity, EditActivity::class.java)
+                editIntent.putExtra("memoId", memoId)
+                startActivity(editIntent)
                 true
             }
             R.id.read_menu_delete -> {

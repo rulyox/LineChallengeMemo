@@ -56,8 +56,8 @@ class MainActivity: AppCompatActivity() {
         // add button
         main_button_add.setOnClickListener {
 
-            val writeIntent = Intent(this@MainActivity, WriteActivity::class.java)
-            startActivityForResult(writeIntent, 1)
+            val createIntent = Intent(this@MainActivity, CreateActivity::class.java)
+            startActivityForResult(createIntent, 1)
 
         }
 

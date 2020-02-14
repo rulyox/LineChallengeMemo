@@ -4,18 +4,15 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import android.net.Uri
 import android.os.Environment
 import android.graphics.drawable.BitmapDrawable
+import androidx.appcompat.app.AlertDialog
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 
 import java.io.File
 import java.io.FileOutputStream
@@ -23,24 +20,15 @@ import java.io.InputStream
 
 import kotlinx.android.synthetic.main.activity_write.*
 
-import com.rulyox.linechallengememo.data.AppRepository
-import com.rulyox.linechallengememo.data.Image
-import com.rulyox.linechallengememo.data.Memo
+abstract class WriteActivity: AppCompatActivity() {
 
-class WriteActivity: AppCompatActivity() {
+    protected var imgDrawableList: MutableList<Drawable> = mutableListOf()
 
-    private val imageList: MutableList<Drawable> = mutableListOf()
+    abstract fun initUI()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_write)
-        setSupportActionBar(write_toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    abstract fun saveMemo()
 
-        initUI()
-
-    }
+    abstract fun deleteImage(position: Int)
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_write, menu)
@@ -73,54 +61,78 @@ class WriteActivity: AppCompatActivity() {
 
     }
 
-    private fun initUI() {
+    fun getImageGallery() {
 
-        write_navigation_image.setOnNavigationItemSelectedListener { item ->
-            when(item.itemId) {
-                R.id.write_menu_gallery -> { getImageGallery() }
-                R.id.write_menu_camera -> { }
-                R.id.write_menu_url -> { }
+        val pickIntent = Intent(Intent.ACTION_GET_CONTENT)
+        pickIntent.type = "image/*"
+
+        startActivityForResult(pickIntent, 1)
+
+    }
+
+    private fun gotImageGallery(data: Intent) {
+
+        val imgUri: Uri = data.data!!
+        val imgStream: InputStream = contentResolver.openInputStream(imgUri)!!
+        val imgDrawable: Drawable = Drawable.createFromStream(imgStream, imgUri.toString())
+        imgStream.close()
+
+        imgDrawableList.add(imgDrawable)
+
+        updateRecycler()
+
+    }
+
+    fun updateRecycler() {
+
+        if(imgDrawableList.size > 0) write_recycler_image.visibility = View.VISIBLE
+        else write_recycler_image.visibility = View.GONE
+
+        val imageAdapter = ImageAdapter(imgDrawableList, this)
+        write_recycler_image.adapter = imageAdapter
+        imageAdapter.notifyDataSetChanged()
+
+    }
+
+    fun imageClicked(position: Int) {
+
+        val alertDialogBuilder = AlertDialog.Builder(this@WriteActivity)
+        alertDialogBuilder.setItems(arrayOf(getString(R.string.write_dialog_show), getString(R.string.write_dialog_delete))) { dialog, id ->
+
+            if (id == 0) { // show
+
+                // image is currently not saved in storage. save temp image
+                val imgBmp: Bitmap = (imgDrawableList[position] as BitmapDrawable).bitmap
+
+                val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                val imgFile = File(imgDir, "temp.jpg")
+                val imgPath: String = imgFile.absolutePath
+
+                val imgFileStream = FileOutputStream(imgPath)
+                imgBmp.compress(Bitmap.CompressFormat.JPEG, 100, imgFileStream)
+                imgFileStream.close()
+
+                val showIntent = Intent(this@WriteActivity, ShowImageActivity::class.java)
+                showIntent.putExtra("path", imgPath)
+                showIntent.putExtra("temp", true)
+                startActivity(showIntent)
+
+                dialog.cancel()
+
+            } else if (id == 1) { // delete
+
+                deleteImage(position)
+
+                dialog.cancel()
+
             }
-            true
-        }
-
-        // recycler view
-        write_recycler_image.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
-
-    }
-
-    private fun finishAndRefresh() {
-
-        val finishIntent = Intent()
-        finishIntent.putExtra("refresh", true)
-        setResult(Activity.RESULT_OK, finishIntent)
-
-        finish()
-
-    }
-
-    private fun saveMemo() {
-
-        val appRepository = AppRepository(application)
-
-        // save memo
-        val newMemo = Memo(null, write_edit_title.text.toString(), write_edit_text.text.toString())
-        val newId: Int = appRepository.addMemo(newMemo).toInt()
-
-        // save images
-        for((index, imgDrawable) in imageList.withIndex()) {
-
-            val imgName = saveDrawable(imgDrawable, newId, index)
-            val newImage = Image(null, newId, imgName)
-            appRepository.addImage(newImage)
 
         }
-
-        Toast.makeText(this@WriteActivity, R.string.write_saved, Toast.LENGTH_SHORT).show()
+        alertDialogBuilder.create().show()
 
     }
 
-    private fun saveDrawable(imgDrawable: Drawable, memoId: Int, index: Int): String {
+    fun saveDrawable(imgDrawable: Drawable, memoId: Int, index: Int): String {
 
         val imgName = "img_${memoId}_${index}"
 
@@ -161,35 +173,13 @@ class WriteActivity: AppCompatActivity() {
 
     }
 
-    private fun updateRecycler() {
+    private fun finishAndRefresh() {
 
-        if(imageList.size > 0) write_recycler_image.visibility = View.VISIBLE
-        else write_recycler_image.visibility = View.GONE
+        val finishIntent = Intent()
+        finishIntent.putExtra("refresh", true)
+        setResult(Activity.RESULT_OK, finishIntent)
 
-        val imageAdapter = ImageAdapter(imageList, this)
-        write_recycler_image.adapter = imageAdapter
-        imageAdapter.notifyDataSetChanged()
-
-    }
-
-    private fun getImageGallery() {
-
-        val pickIntent = Intent(Intent.ACTION_GET_CONTENT)
-        pickIntent.type = "image/*"
-
-        startActivityForResult(pickIntent, 1)
-
-    }
-
-    private fun gotImageGallery(data: Intent) {
-
-        val imgUri: Uri = data.data!!
-        val imgStream: InputStream = contentResolver.openInputStream(imgUri)!!
-        val imgDrawable: Drawable = Drawable.createFromStream(imgStream, imgUri.toString())
-        imageList.add(imgDrawable)
-        imgStream.close()
-
-        updateRecycler()
+        finish()
 
     }
 

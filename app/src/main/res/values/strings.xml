@@ -9,10 +9,13 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_camera">Camera</string>
     <string name="menu_url" translatable="false">URL</string>
-    <string name="write_label">New Memo</string>
+    <string name="write_label_create">New Memo</string>
+    <string name="write_label_edit">Edit Memo</string>
     <string name="write_title_hint">Write title here.</string>
     <string name="write_text_hint">Write text here.</string>
     <string name="write_saved">Memo saved.</string>
+    <string name="write_dialog_show">Show Image</string>
+    <string name="write_dialog_delete">Delete Image</string>
     <string name="read_label">Memo</string>
     <string name="read_deleted">Memo deleted.</string>
 </resources>
