@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ImageView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/item_image_parent"
-    android:orientation="horizontal"
+    android:id="@+id/item_image_image"
     android:layout_width="100dp"
     android:layout_height="100dp"
     android:layout_marginStart="7.5dp"
-    android:layout_marginEnd="7.5dp" >
-
-    <ImageView
-        android:id="@+id/item_image_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:foreground="?selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true" />
-
-</LinearLayout>
+    android:layout_marginEnd="7.5dp"
+    android:scaleType="centerCrop"
+    android:foreground="?selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true" />

@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 
 import androidx.recyclerview.widget.RecyclerView
 
@@ -17,10 +16,13 @@ class ImageAdapter(private val drawableList: List<Drawable>, context: Context): 
 
     private val contextWeakReference = WeakReference(context)
 
-    inner class CustomViewHolder(view: View, context: Context): RecyclerView.ViewHolder(view) {
+    inner class CustomViewHolder(view: View, val context: Context): RecyclerView.ViewHolder(view) {
 
-        private val parent: LinearLayout = view.findViewById(R.id.item_image_parent)
         val image: ImageView = view.findViewById(R.id.item_image_image)
+
+        init {
+            image.setOnClickListener{ (context as ReadActivity).imageClicked(adapterPosition) }
+        }
 
     }
 
@@ -35,12 +37,10 @@ class ImageAdapter(private val drawableList: List<Drawable>, context: Context): 
 
     override fun onBindViewHolder(viewholder: CustomViewHolder, position: Int) {
 
-        val context: Context = contextWeakReference.get()!!
-
         viewholder.image.setImageDrawable(drawableList[position])
 
         // image view round corners
-        val roundCorner = context.getDrawable(R.drawable.round_corner) as GradientDrawable
+        val roundCorner = viewholder.context.getDrawable(R.drawable.round_corner) as GradientDrawable
         viewholder.image.background = roundCorner
         viewholder.image.clipToOutline = true
 

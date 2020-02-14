@@ -24,6 +24,7 @@ import com.rulyox.linechallengememo.data.Memo
 class ReadActivity: AppCompatActivity() {
 
     private var memoId: Int = -1
+    private var imgList: List<String> = listOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,9 +79,9 @@ class ReadActivity: AppCompatActivity() {
         read_edit_title.text = memo.title
         read_edit_text.text = memo.text
 
-        val imageList: List<String> = appRepository.getImageByMemo(memoId)
+        imgList = appRepository.getImageByMemo(memoId)
 
-        if(imageList.isNotEmpty()) {
+        if(imgList.isNotEmpty()) {
 
             read_recycler_image.visibility = View.VISIBLE
 
@@ -89,7 +90,7 @@ class ReadActivity: AppCompatActivity() {
             val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
             // get drawables from files
-            for(imgName in imageList) {
+            for(imgName in this.imgList) {
 
                 val imgFile = File(imgDir, "${imgName}_thumb.jpg")
 
@@ -130,11 +131,9 @@ class ReadActivity: AppCompatActivity() {
         val appRepository = AppRepository(application)
 
         // delete images
-        val imageList: List<String> = appRepository.getImageByMemo(memoId)
-
         val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
-        for(imgName in imageList) {
+        for(imgName in imgList) {
 
             val imgFile = File(imgDir, "${imgName}.jpg")
             if(imgFile.exists()) imgFile.delete()
@@ -148,6 +147,18 @@ class ReadActivity: AppCompatActivity() {
         appRepository.deleteMemo(memo)
 
         Toast.makeText(this@ReadActivity, R.string.read_deleted, Toast.LENGTH_SHORT).show()
+
+    }
+
+    fun imageClicked(position: Int) {
+
+        val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val imgFile = File(imgDir, "${imgList[position]}.jpg")
+        val imgPath: String = imgFile.absolutePath
+
+        val showIntent = Intent(this@ReadActivity, ShowImageActivity::class.java)
+        showIntent.putExtra("path", imgPath)
+        startActivity(showIntent)
 
     }
 

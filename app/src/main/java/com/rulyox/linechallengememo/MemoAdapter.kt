@@ -25,7 +25,7 @@ class MemoAdapter(private val memoList: List<Memo>, context: Context): RecyclerV
 
     private val contextWeakReference = WeakReference(context)
 
-    inner class CustomViewHolder(view: View, context: Context): RecyclerView.ViewHolder(view) {
+    inner class CustomViewHolder(view: View, val context: Context): RecyclerView.ViewHolder(view) {
 
         private val parent: LinearLayout = view.findViewById(R.id.item_parent)
         val title: TextView = view.findViewById(R.id.item_title)
@@ -49,8 +49,7 @@ class MemoAdapter(private val memoList: List<Memo>, context: Context): RecyclerV
 
     override fun onBindViewHolder(viewholder: CustomViewHolder, position: Int) {
 
-        val context: Context = contextWeakReference.get()!!
-        val application: Application = context.applicationContext as Application
+        val application: Application = viewholder.context.applicationContext as Application
 
         viewholder.title.text = memoList[position].title
         viewholder.text.text = memoList[position].text
@@ -61,7 +60,7 @@ class MemoAdapter(private val memoList: List<Memo>, context: Context): RecyclerV
 
         if(thumbnail != null) {
 
-            val imgDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            val imgDir = viewholder.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
             val imgFile = File(imgDir, "${thumbnail}_thumb.jpg")
 
             if(imgFile.exists()) {
@@ -76,7 +75,7 @@ class MemoAdapter(private val memoList: List<Memo>, context: Context): RecyclerV
             }
 
             // image view round corners
-            val roundCorner = context.getDrawable(R.drawable.round_corner) as GradientDrawable
+            val roundCorner = viewholder.context.getDrawable(R.drawable.round_corner) as GradientDrawable
             viewholder.thumb.background = roundCorner
             viewholder.thumb.clipToOutline = true
 
