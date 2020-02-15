@@ -1,7 +1,6 @@
 package com.rulyox.linechallengememo.data
 
 import android.app.Application
-
 import kotlinx.coroutines.runBlocking
 
 class AppRepository(application: Application) {

@@ -8,7 +8,6 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.widget.ImageView
-
 import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.roundToInt

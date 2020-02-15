@@ -1,22 +1,20 @@
-package com.rulyox.linechallengememo
+package com.rulyox.linechallengememo.activity
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Environment
 import android.text.SpannableStringBuilder
 import android.view.View
-
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
-import java.io.File
-
-import kotlinx.android.synthetic.main.activity_write.*
-
+import com.rulyox.linechallengememo.R
+import com.rulyox.linechallengememo.adapter.ImageAdapter
 import com.rulyox.linechallengememo.data.AppRepository
 import com.rulyox.linechallengememo.data.Memo
+import kotlinx.android.synthetic.main.activity_write.*
+import java.io.File
 
-class EditActivity: WriteActivity() {
+class EditWriteActivity: AbstractWriteActivity() {
 
     private var memoId: Int = -1
 

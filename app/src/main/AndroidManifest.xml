@@ -11,7 +11,7 @@
         android:allowBackup="false"
         android:supportsRtl="true" >
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait" >
@@ -22,19 +22,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CreateActivity"
+            android:name=".activity.CreateWriteActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".EditActivity"
+            android:name=".activity.EditWriteActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ReadActivity"
+            android:name=".activity.ReadActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ShowImageActivity"
+            android:name=".activity.ShowImageActivity"
             android:theme="@style/ShowImageTheme"/>
     </application>
 

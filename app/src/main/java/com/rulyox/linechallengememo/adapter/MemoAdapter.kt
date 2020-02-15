@@ -1,9 +1,10 @@
-package com.rulyox.linechallengememo
+package com.rulyox.linechallengememo.adapter
 
 import android.app.Application
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.GradientDrawable
 import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,15 +12,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.graphics.drawable.GradientDrawable
-
 import androidx.recyclerview.widget.RecyclerView
-
-import java.lang.ref.WeakReference
-import java.io.File
-
-import com.rulyox.linechallengememo.data.Memo
+import com.rulyox.linechallengememo.R
+import com.rulyox.linechallengememo.activity.MainActivity
 import com.rulyox.linechallengememo.data.AppRepository
+import com.rulyox.linechallengememo.data.Memo
+import java.io.File
+import java.lang.ref.WeakReference
 
 class MemoAdapter(private val memoList: List<Memo>, context: Context): RecyclerView.Adapter<MemoAdapter.CustomViewHolder?>() {
 

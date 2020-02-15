@@ -1,18 +1,16 @@
-package com.rulyox.linechallengememo
+package com.rulyox.linechallengememo.activity
 
 import android.os.Bundle
 import android.widget.Toast
-
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
-import kotlinx.android.synthetic.main.activity_write.*
-
+import com.rulyox.linechallengememo.R
 import com.rulyox.linechallengememo.data.AppRepository
 import com.rulyox.linechallengememo.data.Image
 import com.rulyox.linechallengememo.data.Memo
+import kotlinx.android.synthetic.main.activity_write.*
 
-class CreateActivity: WriteActivity() {
+class CreateWriteActivity: AbstractWriteActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +60,8 @@ class CreateActivity: WriteActivity() {
 
         }
 
-        Toast.makeText(this@CreateActivity, R.string.write_saved, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@CreateWriteActivity,
+            R.string.write_saved, Toast.LENGTH_SHORT).show()
 
     }
 

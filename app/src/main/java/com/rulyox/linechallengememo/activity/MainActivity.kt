@@ -1,19 +1,18 @@
-package com.rulyox.linechallengememo
+package com.rulyox.linechallengememo.activity
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-
-import kotlinx.android.synthetic.main.activity_main.*
-
+import com.rulyox.linechallengememo.R
+import com.rulyox.linechallengememo.adapter.MemoAdapter
 import com.rulyox.linechallengememo.data.AppRepository
 import com.rulyox.linechallengememo.data.Memo
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity: AppCompatActivity() {
 
@@ -56,7 +55,7 @@ class MainActivity: AppCompatActivity() {
         // add button
         main_button_add.setOnClickListener {
 
-            val createIntent = Intent(this@MainActivity, CreateActivity::class.java)
+            val createIntent = Intent(this@MainActivity, CreateWriteActivity::class.java)
             startActivityForResult(createIntent, 1)
 
         }

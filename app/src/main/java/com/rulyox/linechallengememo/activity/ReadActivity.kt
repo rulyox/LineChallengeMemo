@@ -1,4 +1,4 @@
-package com.rulyox.linechallengememo
+package com.rulyox.linechallengememo.activity
 
 import android.app.Activity
 import android.content.Intent
@@ -9,17 +9,15 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
-import java.io.File
-
-import kotlinx.android.synthetic.main.activity_read.*
-
+import com.rulyox.linechallengememo.R
+import com.rulyox.linechallengememo.adapter.ImageAdapter
 import com.rulyox.linechallengememo.data.AppRepository
 import com.rulyox.linechallengememo.data.Memo
+import kotlinx.android.synthetic.main.activity_read.*
+import java.io.File
 
 class ReadActivity: AppCompatActivity() {
 
@@ -52,7 +50,7 @@ class ReadActivity: AppCompatActivity() {
                 true
             }
             R.id.read_menu_edit -> {
-                val editIntent = Intent(this@ReadActivity, EditActivity::class.java)
+                val editIntent = Intent(this@ReadActivity, EditWriteActivity::class.java)
                 editIntent.putExtra("memoId", memoId)
                 startActivity(editIntent)
                 true
@@ -149,7 +147,8 @@ class ReadActivity: AppCompatActivity() {
         val memo: Memo = appRepository.getMemoById(memoId)
         appRepository.deleteMemo(memo)
 
-        Toast.makeText(this@ReadActivity, R.string.read_deleted, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@ReadActivity,
+            R.string.read_deleted, Toast.LENGTH_SHORT).show()
 
     }
 

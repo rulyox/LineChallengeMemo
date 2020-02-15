@@ -1,14 +1,12 @@
-package com.rulyox.linechallengememo
+package com.rulyox.linechallengememo.activity
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Environment
-
 import androidx.appcompat.app.AppCompatActivity
-
-import java.io.File
-
+import com.rulyox.linechallengememo.R
 import kotlinx.android.synthetic.main.activity_show_image.*
+import java.io.File
 
 class ShowImageActivity: AppCompatActivity() {
 

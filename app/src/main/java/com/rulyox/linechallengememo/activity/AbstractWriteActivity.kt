@@ -1,26 +1,25 @@
-package com.rulyox.linechallengememo
+package com.rulyox.linechallengememo.activity
 
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.net.Uri
+import android.os.Environment
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.net.Uri
-import android.os.Environment
-import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AlertDialog
-
 import androidx.appcompat.app.AppCompatActivity
-
+import com.rulyox.linechallengememo.R
+import com.rulyox.linechallengememo.adapter.ImageAdapter
+import kotlinx.android.synthetic.main.activity_write.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 
-import kotlinx.android.synthetic.main.activity_write.*
-
-abstract class WriteActivity: AppCompatActivity() {
+abstract class AbstractWriteActivity: AppCompatActivity() {
 
     protected var imgDrawableList: MutableList<Drawable> = mutableListOf()
 
@@ -96,8 +95,10 @@ abstract class WriteActivity: AppCompatActivity() {
 
     fun imageClicked(position: Int) {
 
-        val alertDialogBuilder = AlertDialog.Builder(this@WriteActivity)
-        alertDialogBuilder.setItems(arrayOf(getString(R.string.write_dialog_show), getString(R.string.write_dialog_delete))) { dialog, id ->
+        val alertDialogBuilder = AlertDialog.Builder(this@AbstractWriteActivity)
+        alertDialogBuilder.setItems(arrayOf(getString(R.string.write_dialog_show), getString(
+            R.string.write_dialog_delete
+        ))) { dialog, id ->
 
             if (id == 0) { // show
 
@@ -112,7 +113,7 @@ abstract class WriteActivity: AppCompatActivity() {
                 imgBmp.compress(Bitmap.CompressFormat.JPEG, 100, imgFileStream)
                 imgFileStream.close()
 
-                val showIntent = Intent(this@WriteActivity, ShowImageActivity::class.java)
+                val showIntent = Intent(this@AbstractWriteActivity, ShowImageActivity::class.java)
                 showIntent.putExtra("path", imgPath)
                 showIntent.putExtra("temp", true)
                 startActivity(showIntent)

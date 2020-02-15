@@ -84,7 +84,7 @@
         android:background="@color/colorGrey"
         app:itemIconTint="@color/colorPrimary"
         app:itemTextColor="@color/colorPrimary"
-        app:menu="@menu/menu_write_image" >
+        app:menu="@menu/nav_write" >
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 

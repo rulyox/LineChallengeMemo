@@ -1,4 +1,4 @@
-package com.rulyox.linechallengememo
+package com.rulyox.linechallengememo.adapter
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -7,9 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-
 import androidx.recyclerview.widget.RecyclerView
-
+import com.rulyox.linechallengememo.R
+import com.rulyox.linechallengememo.activity.AbstractWriteActivity
+import com.rulyox.linechallengememo.activity.ReadActivity
 import java.lang.ref.WeakReference
 
 class ImageAdapter(private val drawableList: List<Drawable>, context: Context): RecyclerView.Adapter<ImageAdapter.CustomViewHolder?>() {
@@ -22,7 +23,7 @@ class ImageAdapter(private val drawableList: List<Drawable>, context: Context): 
 
         init {
             if(context is ReadActivity) image.setOnClickListener{ context.imageClicked(adapterPosition) }
-            else if(context is WriteActivity) image.setOnClickListener{ context.imageClicked(adapterPosition) }
+            else if(context is AbstractWriteActivity) image.setOnClickListener{ context.imageClicked(adapterPosition) }
         }
 
     }
