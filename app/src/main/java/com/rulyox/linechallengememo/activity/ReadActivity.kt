@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rulyox.linechallengememo.R
 import com.rulyox.linechallengememo.adapter.ImageAdapter
 import com.rulyox.linechallengememo.data.AppRepository
+import com.rulyox.linechallengememo.data.Image
 import com.rulyox.linechallengememo.data.Memo
 import kotlinx.android.synthetic.main.activity_read.*
 import java.io.File
@@ -23,7 +24,8 @@ import java.io.File
 class ReadActivity: AppCompatActivity() {
 
     private var memoId: Int = -1
-    private var imgStringList: List<String> = listOf()
+    private var imgList: List<Image> = listOf()
+    private lateinit var appRepository: AppRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +35,7 @@ class ReadActivity: AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         memoId = intent.getIntExtra("id", -1)
+        appRepository = AppRepository(application)
 
         initUI()
         getMemoData()
@@ -87,27 +90,23 @@ class ReadActivity: AppCompatActivity() {
 
     private fun getMemoData() {
 
-        val appRepository = AppRepository(application)
-
         val memo: Memo = appRepository.getMemoById(memoId)
 
         read_edit_title.text = memo.title
         read_edit_text.text = memo.text
 
-        imgStringList = appRepository.getImageByMemo(memoId)
+        imgList = appRepository.getImageByMemo(memoId)
 
-        if(imgStringList.isNotEmpty()) {
+        if(imgList.isNotEmpty()) {
 
             read_recycler_image.visibility = View.VISIBLE
 
             val imgDrawableList: MutableList<Drawable> = mutableListOf()
 
-            val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-
             // get drawables from files
-            for(imgName in imgStringList) {
+            for(img in imgList) {
 
-                val imgFile = File(imgDir, "${imgName}_thumb.jpg")
+                val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${img.file}_thumb.jpg")
 
                 if(imgFile.exists()) {
 
@@ -130,23 +129,19 @@ class ReadActivity: AppCompatActivity() {
             read_recycler_image.adapter = imageAdapter
             imageAdapter.notifyDataSetChanged()
 
-        }
+        } else read_recycler_image.visibility = View.GONE
 
     }
 
     private fun deleteMemo() {
 
-        val appRepository = AppRepository(application)
-
         // delete images
-        val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        for(img in imgList) {
 
-        for(imgName in imgStringList) {
-
-            val imgFile = File(imgDir, "${imgName}.jpg")
+            val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${img.file}.jpg")
             if(imgFile.exists()) imgFile.delete()
 
-            val thumbFile = File(imgDir, "${imgName}_thumb.jpg")
+            val thumbFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${img.file}_thumb.jpg")
             if(thumbFile.exists()) thumbFile.delete()
 
         }
@@ -160,8 +155,7 @@ class ReadActivity: AppCompatActivity() {
 
     fun clickImage(position: Int) {
 
-        val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val imgFile = File(imgDir, "${imgStringList[position]}.jpg")
+        val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${imgList[position].file}.jpg")
 
         if(imgFile.exists()) {
 

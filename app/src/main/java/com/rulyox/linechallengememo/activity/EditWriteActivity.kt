@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rulyox.linechallengememo.R
 import com.rulyox.linechallengememo.adapter.ImageAdapter
 import com.rulyox.linechallengememo.data.AppRepository
+import com.rulyox.linechallengememo.data.Image
 import com.rulyox.linechallengememo.data.Memo
 import kotlinx.android.synthetic.main.activity_write.*
 import java.io.File
@@ -24,7 +25,9 @@ import java.io.FileOutputStream
 class EditWriteActivity: AbstractWriteActivity() {
 
     private var memoId: Int = -1
-    private var imgNotFoundList: MutableList<Int> = mutableListOf()
+    private var existedImgList: MutableList<Image> = mutableListOf()
+    private var deletedImgList: MutableList<Image> = mutableListOf()
+    private lateinit var appRepository: AppRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +35,9 @@ class EditWriteActivity: AbstractWriteActivity() {
         setSupportActionBar(write_toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        memoId = intent.getIntExtra("memoId", -1)
+        appRepository = AppRepository(application)
 
         initUI()
         getMemoData()
@@ -60,27 +66,19 @@ class EditWriteActivity: AbstractWriteActivity() {
 
     private fun getMemoData() {
 
-        memoId = intent.getIntExtra("memoId", -1)
-
-        val appRepository = AppRepository(application)
-
         val memo: Memo = appRepository.getMemoById(memoId)
 
         write_edit_title.text = SpannableStringBuilder(memo.title)
         write_edit_text.text = SpannableStringBuilder(memo.text)
 
-        val imgStringList: List<String>  = appRepository.getImageByMemo(memoId)
+        existedImgList = appRepository.getImageByMemo(memoId).toMutableList()
 
-        if(imgStringList.isNotEmpty()) {
-
-            write_recycler_image.visibility = View.VISIBLE
-
-            val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        if(existedImgList.isNotEmpty()) {
 
             // get drawables from files
-            for((index, imgName) in imgStringList.withIndex()) {
+            for(img in existedImgList) {
 
-                val imgFile = File(imgDir, "${imgName}.jpg")
+                val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${img.file}_thumb.jpg")
 
                 if(imgFile.exists()) {
 
@@ -91,8 +89,6 @@ class EditWriteActivity: AbstractWriteActivity() {
 
                 } else {
 
-                    imgNotFoundList.add(index)
-
                     val imgDrawable: Drawable = ContextCompat.getDrawable(this@EditWriteActivity, R.drawable.img_not_found)!!
                     imgDrawableList.add(imgDrawable)
 
@@ -100,10 +96,7 @@ class EditWriteActivity: AbstractWriteActivity() {
 
             }
 
-            // recycler view adapter
-            val imageAdapter = ImageAdapter(imgDrawableList, this)
-            write_recycler_image.adapter = imageAdapter
-            imageAdapter.notifyDataSetChanged()
+            updateRecycler()
 
         }
 
@@ -118,13 +111,26 @@ class EditWriteActivity: AbstractWriteActivity() {
 
             if (id == 0) { // show
 
-                if(!imgNotFoundList.contains(position)) {
+                if(existedImgList.size > position) { // existing image
+
+                    val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${existedImgList[position].file}.jpg")
+
+                    if(imgFile.exists()) {
+
+                        val imgPath: String = imgFile.absolutePath
+
+                        val showIntent = Intent(this@EditWriteActivity, ShowImageActivity::class.java)
+                        showIntent.putExtra("path", imgPath)
+                        startActivity(showIntent)
+
+                    } else Toast.makeText(this@EditWriteActivity, R.string.error_image_not_found, Toast.LENGTH_SHORT).show()
+
+                } else { // newly added images
 
                     // image is currently not saved in storage. save temp image
                     val imgBmp: Bitmap = (imgDrawableList[position] as BitmapDrawable).bitmap
 
-                    val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                    val imgFile = File(imgDir, "temp.jpg")
+                    val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp.jpg")
                     val imgPath: String = imgFile.absolutePath
 
                     val imgFileStream = FileOutputStream(imgPath)
@@ -138,7 +144,7 @@ class EditWriteActivity: AbstractWriteActivity() {
 
                     dialog.cancel()
 
-                } else Toast.makeText(this@EditWriteActivity, R.string.error_image_not_found, Toast.LENGTH_SHORT).show()
+                }
 
             } else if (id == 1) { // delete
 
@@ -157,14 +163,10 @@ class EditWriteActivity: AbstractWriteActivity() {
 
         imgDrawableList.removeAt(position)
 
-        // fix imgNotFoundList
-        if(imgNotFoundList.contains(position)) {
-
-            imgNotFoundList.remove(position)
-
-            for((imgIndex, imgPosition) in imgNotFoundList.withIndex())
-                if(imgPosition > position) imgNotFoundList[imgIndex]--
-
+        // add to deletedImgList
+        if(existedImgList.size > position) {
+            deletedImgList.add(existedImgList[position])
+            existedImgList.removeAt(position)
         }
 
         updateRecycler()
@@ -173,15 +175,36 @@ class EditWriteActivity: AbstractWriteActivity() {
 
     override fun saveMemo() {
 
-        val appRepository = AppRepository(application)
-
         // save memo
         val editedMemo = Memo(memoId, write_edit_title.text.toString(), write_edit_text.text.toString())
         appRepository.updateMemo(editedMemo)
 
-        Toast.makeText(this@EditWriteActivity, R.string.write_edited, Toast.LENGTH_SHORT).show()
+        // delete image files
+        for(img in deletedImgList) {
 
-        TODO("Handle image changes")
+            appRepository.deleteImage(img)
+
+            val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${img.file}.jpg")
+            if(imgFile.exists()) imgFile.delete()
+
+            val thumbFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${img.file}_thumb.jpg")
+            if(thumbFile.exists()) thumbFile.delete()
+
+        }
+
+        // save images
+        for((index, imgDrawable) in imgDrawableList.withIndex()) {
+
+            // image is already saved
+            if(existedImgList.size > index) continue
+
+            val imgName = saveDrawable(imgDrawable, memoId, index)
+            val newImage = Image(null, memoId, imgName)
+            appRepository.addImage(newImage)
+
+        }
+
+        Toast.makeText(this@EditWriteActivity, R.string.write_edited, Toast.LENGTH_SHORT).show()
 
     }
 

@@ -15,11 +15,15 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity: AppCompatActivity() {
 
+    private lateinit var appRepository: AppRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(main_toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        appRepository = AppRepository(application)
 
         initUI()
         getMemoList()
@@ -65,8 +69,6 @@ class MainActivity: AppCompatActivity() {
     }
 
     private fun getMemoList() {
-
-        val appRepository = AppRepository(application)
 
         val memoList: List<Memo> = appRepository.getAllMemo()
         val memoNum: Int = appRepository.getAllMemo().size

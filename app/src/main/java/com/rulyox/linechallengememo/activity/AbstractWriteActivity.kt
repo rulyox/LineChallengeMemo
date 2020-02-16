@@ -101,8 +101,7 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
 
         val imgBmp: Bitmap = (imgDrawable as BitmapDrawable).bitmap
 
-        val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val imgFile = File(imgDir, "${imgName}.jpg")
+        val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${imgName}.jpg")
         val imgPath: String = imgFile.absolutePath
 
         val imgFileStream = FileOutputStream(imgPath)
@@ -125,7 +124,7 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
 
         val resizedBmp: Bitmap = Bitmap.createScaledBitmap(imgBmp, imgWidth, imgHeight, false)
 
-        val thumbFile = File(imgDir, "${imgName}_thumb.jpg")
+        val thumbFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${imgName}_thumb.jpg")
         val thumbPath: String = thumbFile.absolutePath
 
         val thumbFileStream = FileOutputStream(thumbPath)

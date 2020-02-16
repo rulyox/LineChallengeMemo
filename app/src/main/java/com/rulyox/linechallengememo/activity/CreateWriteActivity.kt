@@ -19,12 +19,16 @@ import java.io.FileOutputStream
 
 class CreateWriteActivity: AbstractWriteActivity() {
 
+    private lateinit var appRepository: AppRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_write)
         setSupportActionBar(write_toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        appRepository = AppRepository(application)
 
         initUI()
 
@@ -62,8 +66,7 @@ class CreateWriteActivity: AbstractWriteActivity() {
                 // image is currently not saved in storage. save temp image
                 val imgBmp: Bitmap = (imgDrawableList[position] as BitmapDrawable).bitmap
 
-                val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                val imgFile = File(imgDir, "temp.jpg")
+                val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp.jpg")
                 val imgPath: String = imgFile.absolutePath
 
                 val imgFileStream = FileOutputStream(imgPath)
@@ -99,8 +102,6 @@ class CreateWriteActivity: AbstractWriteActivity() {
     }
 
     override fun saveMemo() {
-
-        val appRepository = AppRepository(application)
 
         // save memo
         val newMemo = Memo(null, write_edit_title.text.toString(), write_edit_text.text.toString())

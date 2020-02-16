@@ -2,7 +2,6 @@ package com.rulyox.linechallengememo.activity
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.os.Environment
 import androidx.appcompat.app.AppCompatActivity
 import com.rulyox.linechallengememo.R
 import kotlinx.android.synthetic.main.activity_show_image.*
@@ -20,23 +19,20 @@ class ShowImageActivity: AppCompatActivity() {
 
     private fun initImage() {
 
-        val imgPath: String? = intent.getStringExtra("path")
+        val imgPath: String = intent.getStringExtra("path")!!
         val tempExist: Boolean = intent.getBooleanExtra("temp", false)
 
         val imgBmp = BitmapFactory.decodeFile(imgPath)
         show_image.setImageBitmap(imgBmp)
 
         // temp image exists if called by WriteActivity
-        if(tempExist) deleteTempImage()
+        if(tempExist) {
 
-    }
+            val imgFile = File(imgPath)
 
-    private fun deleteTempImage() {
+            if(imgFile.exists()) imgFile.delete()
 
-        val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val imgFile = File(imgDir, "temp.jpg")
-
-        if(imgFile.exists()) imgFile.delete()
+        }
 
     }
 

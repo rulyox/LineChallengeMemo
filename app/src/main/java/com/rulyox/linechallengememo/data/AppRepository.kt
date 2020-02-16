@@ -21,8 +21,10 @@ class AppRepository(application: Application) {
 
     fun addImage(image: Image) = runBlocking { imageDao.insert(image) }
 
-    fun getImageByMemo(memoId: Int): List<String> = runBlocking { imageDao.selectImageByMemo(memoId) }
+    fun getImageByMemo(memoId: Int): List<Image> = runBlocking { imageDao.selectImageByMemo(memoId) }
 
     fun getThumbnailByMemo(memoId: Int): String? = runBlocking { imageDao.selectThumbnailByMemo(memoId) }
+
+    fun deleteImage(image: Image) = runBlocking { imageDao.delete(image) }
 
 }
