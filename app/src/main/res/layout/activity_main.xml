@@ -56,7 +56,6 @@
             android:id="@+id/main_recycler_memo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="15dp"
             android:visibility="gone" />
 
     </LinearLayout>

@@ -10,7 +10,6 @@ import android.os.Environment
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.rulyox.linechallengememo.R
 import com.rulyox.linechallengememo.adapter.ImageAdapter
@@ -26,6 +25,8 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
     abstract fun initUI()
 
     abstract fun saveMemo()
+
+    abstract fun imageClicked(position: Int)
 
     abstract fun deleteImage(position: Int)
 
@@ -90,46 +91,6 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
         val imageAdapter = ImageAdapter(imgDrawableList, this)
         write_recycler_image.adapter = imageAdapter
         imageAdapter.notifyDataSetChanged()
-
-    }
-
-    fun imageClicked(position: Int) {
-
-        val alertDialogBuilder = AlertDialog.Builder(this@AbstractWriteActivity)
-        alertDialogBuilder.setItems(arrayOf(getString(R.string.write_dialog_show), getString(
-            R.string.write_dialog_delete
-        ))) { dialog, id ->
-
-            if (id == 0) { // show
-
-                // image is currently not saved in storage. save temp image
-                val imgBmp: Bitmap = (imgDrawableList[position] as BitmapDrawable).bitmap
-
-                val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                val imgFile = File(imgDir, "temp.jpg")
-                val imgPath: String = imgFile.absolutePath
-
-                val imgFileStream = FileOutputStream(imgPath)
-                imgBmp.compress(Bitmap.CompressFormat.JPEG, 100, imgFileStream)
-                imgFileStream.close()
-
-                val showIntent = Intent(this@AbstractWriteActivity, ShowImageActivity::class.java)
-                showIntent.putExtra("path", imgPath)
-                showIntent.putExtra("temp", true)
-                startActivity(showIntent)
-
-                dialog.cancel()
-
-            } else if (id == 1) { // delete
-
-                deleteImage(position)
-
-                dialog.cancel()
-
-            }
-
-        }
-        alertDialogBuilder.create().show()
 
     }
 

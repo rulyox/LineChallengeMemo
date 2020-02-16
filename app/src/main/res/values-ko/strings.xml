@@ -16,4 +16,5 @@
     <string name="write_dialog_delete">이미지 삭제</string>
     <string name="read_label">메모</string>
     <string name="read_deleted">메모가 삭제되었습니다.</string>
+    <string name="error_image_not_found">이미지가 존재하지 않습니다!</string>
 </resources>

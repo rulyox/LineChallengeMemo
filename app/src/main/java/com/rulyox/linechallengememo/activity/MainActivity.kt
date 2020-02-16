@@ -6,7 +6,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rulyox.linechallengememo.R
 import com.rulyox.linechallengememo.adapter.MemoAdapter
@@ -62,7 +61,6 @@ class MainActivity: AppCompatActivity() {
 
         // recycler view
         main_recycler_memo.layoutManager = LinearLayoutManager(this)
-        main_recycler_memo.addItemDecoration(DividerItemDecoration(main_recycler_memo.context, DividerItemDecoration.VERTICAL))
 
     }
 

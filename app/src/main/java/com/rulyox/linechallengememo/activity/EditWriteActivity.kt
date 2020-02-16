@@ -1,10 +1,16 @@
 package com.rulyox.linechallengememo.activity
 
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Environment
 import android.text.SpannableStringBuilder
 import android.view.View
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.rulyox.linechallengememo.R
@@ -13,10 +19,12 @@ import com.rulyox.linechallengememo.data.AppRepository
 import com.rulyox.linechallengememo.data.Memo
 import kotlinx.android.synthetic.main.activity_write.*
 import java.io.File
+import java.io.FileOutputStream
 
 class EditWriteActivity: AbstractWriteActivity() {
 
     private var memoId: Int = -1
+    private var imgNotFoundList: MutableList<Int> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +78,7 @@ class EditWriteActivity: AbstractWriteActivity() {
             val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
             // get drawables from files
-            for(imgName in imgStringList) {
+            for((index, imgName) in imgStringList.withIndex()) {
 
                 val imgFile = File(imgDir, "${imgName}.jpg")
 
@@ -82,6 +90,11 @@ class EditWriteActivity: AbstractWriteActivity() {
                     imgDrawableList.add(imgDrawable)
 
                 } else {
+
+                    imgNotFoundList.add(index)
+
+                    val imgDrawable: Drawable = ContextCompat.getDrawable(this@EditWriteActivity, R.drawable.img_not_found)!!
+                    imgDrawableList.add(imgDrawable)
 
                 }
 
@@ -96,11 +109,65 @@ class EditWriteActivity: AbstractWriteActivity() {
 
     }
 
+    override fun imageClicked(position: Int) {
+
+        val alertDialogBuilder = AlertDialog.Builder(this@EditWriteActivity)
+        alertDialogBuilder.setItems(arrayOf(getString(R.string.write_dialog_show), getString(
+            R.string.write_dialog_delete
+        ))) { dialog, id ->
+
+            if (id == 0) { // show
+
+                if(!imgNotFoundList.contains(position)) {
+
+                    // image is currently not saved in storage. save temp image
+                    val imgBmp: Bitmap = (imgDrawableList[position] as BitmapDrawable).bitmap
+
+                    val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                    val imgFile = File(imgDir, "temp.jpg")
+                    val imgPath: String = imgFile.absolutePath
+
+                    val imgFileStream = FileOutputStream(imgPath)
+                    imgBmp.compress(Bitmap.CompressFormat.JPEG, 100, imgFileStream)
+                    imgFileStream.close()
+
+                    val showIntent = Intent(this@EditWriteActivity, ShowImageActivity::class.java)
+                    showIntent.putExtra("path", imgPath)
+                    showIntent.putExtra("temp", true)
+                    startActivity(showIntent)
+
+                    dialog.cancel()
+
+                } else Toast.makeText(this@EditWriteActivity, R.string.error_image_not_found, Toast.LENGTH_SHORT).show()
+
+            } else if (id == 1) { // delete
+
+                deleteImage(position)
+
+                dialog.cancel()
+
+            }
+
+        }
+        alertDialogBuilder.create().show()
+
+    }
+
     override fun saveMemo() {}
 
     override fun deleteImage(position: Int) {
 
         imgDrawableList.removeAt(position)
+
+        // fix imgNotFoundList
+        if(imgNotFoundList.contains(position)) {
+
+            imgNotFoundList.remove(position)
+
+            for((imgIndex, imgPosition) in imgNotFoundList.withIndex())
+                if(imgPosition > position) imgNotFoundList[imgIndex]--
+
+        }
 
         updateRecycler()
 

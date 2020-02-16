@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.rulyox.linechallengememo.R
@@ -22,7 +23,7 @@ import java.io.File
 class ReadActivity: AppCompatActivity() {
 
     private var memoId: Int = -1
-    private var imgList: List<String> = listOf()
+    private var imgStringList: List<String> = listOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,18 +81,18 @@ class ReadActivity: AppCompatActivity() {
         read_edit_title.text = memo.title
         read_edit_text.text = memo.text
 
-        imgList = appRepository.getImageByMemo(memoId)
+        imgStringList = appRepository.getImageByMemo(memoId)
 
-        if(imgList.isNotEmpty()) {
+        if(imgStringList.isNotEmpty()) {
 
             read_recycler_image.visibility = View.VISIBLE
 
-            val imgList: MutableList<Drawable> = mutableListOf()
+            val imgDrawableList: MutableList<Drawable> = mutableListOf()
 
             val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
             // get drawables from files
-            for(imgName in this.imgList) {
+            for(imgName in imgStringList) {
 
                 val imgFile = File(imgDir, "${imgName}_thumb.jpg")
 
@@ -100,16 +101,19 @@ class ReadActivity: AppCompatActivity() {
                     val imgPath: String = imgFile.absolutePath
 
                     val imgDrawable: Drawable = Drawable.createFromPath(imgPath)!!
-                    imgList.add(imgDrawable)
+                    imgDrawableList.add(imgDrawable)
 
                 } else {
+
+                    val imgDrawable: Drawable = ContextCompat.getDrawable(this@ReadActivity, R.drawable.img_not_found)!!
+                    imgDrawableList.add(imgDrawable)
 
                 }
 
             }
 
             // recycler view adapter
-            val imageAdapter = ImageAdapter(imgList, this)
+            val imageAdapter = ImageAdapter(imgDrawableList, this)
             read_recycler_image.adapter = imageAdapter
             imageAdapter.notifyDataSetChanged()
 
@@ -134,7 +138,7 @@ class ReadActivity: AppCompatActivity() {
         // delete images
         val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
-        for(imgName in imgList) {
+        for(imgName in imgStringList) {
 
             val imgFile = File(imgDir, "${imgName}.jpg")
             if(imgFile.exists()) imgFile.delete()
@@ -147,20 +151,24 @@ class ReadActivity: AppCompatActivity() {
         val memo: Memo = appRepository.getMemoById(memoId)
         appRepository.deleteMemo(memo)
 
-        Toast.makeText(this@ReadActivity,
-            R.string.read_deleted, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@ReadActivity, R.string.read_deleted, Toast.LENGTH_SHORT).show()
 
     }
 
     fun imageClicked(position: Int) {
 
         val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val imgFile = File(imgDir, "${imgList[position]}.jpg")
-        val imgPath: String = imgFile.absolutePath
+        val imgFile = File(imgDir, "${imgStringList[position]}.jpg")
 
-        val showIntent = Intent(this@ReadActivity, ShowImageActivity::class.java)
-        showIntent.putExtra("path", imgPath)
-        startActivity(showIntent)
+        if(imgFile.exists()) {
+
+            val imgPath: String = imgFile.absolutePath
+
+            val showIntent = Intent(this@ReadActivity, ShowImageActivity::class.java)
+            showIntent.putExtra("path", imgPath)
+            startActivity(showIntent)
+
+        } else Toast.makeText(this@ReadActivity, R.string.error_image_not_found, Toast.LENGTH_SHORT).show()
 
     }
 

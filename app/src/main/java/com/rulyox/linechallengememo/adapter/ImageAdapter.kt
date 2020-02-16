@@ -42,7 +42,7 @@ class ImageAdapter(private val drawableList: List<Drawable>, context: Context): 
         viewholder.image.setImageDrawable(drawableList[position])
 
         // image view round corners
-        val roundCorner = viewholder.context.getDrawable(R.drawable.round_corner) as GradientDrawable
+        val roundCorner = viewholder.context.getDrawable(R.drawable.bg_round_corner) as GradientDrawable
         viewholder.image.background = roundCorner
         viewholder.image.clipToOutline = true
 

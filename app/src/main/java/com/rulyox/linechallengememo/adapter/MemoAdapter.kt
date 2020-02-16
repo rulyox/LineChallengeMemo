@@ -71,10 +71,13 @@ class MemoAdapter(private val memoList: List<Memo>, context: Context): RecyclerV
 
             } else {
 
+                val thumbBmp: Bitmap = BitmapFactory.decodeResource(viewholder.context.resources, R.drawable.img_not_found)
+                viewholder.thumb.setImageBitmap(thumbBmp)
+
             }
 
             // image view round corners
-            val roundCorner = viewholder.context.getDrawable(R.drawable.round_corner) as GradientDrawable
+            val roundCorner = viewholder.context.getDrawable(R.drawable.bg_round_corner) as GradientDrawable
             viewholder.thumb.background = roundCorner
             viewholder.thumb.clipToOutline = true
 
