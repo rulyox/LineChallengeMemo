@@ -22,8 +22,8 @@ class ImageAdapter(private val drawableList: List<Drawable>, context: Context): 
         val image: ImageView = view.findViewById(R.id.item_image_image)
 
         init {
-            if(context is ReadActivity) image.setOnClickListener{ context.imageClicked(adapterPosition) }
-            else if(context is AbstractWriteActivity) image.setOnClickListener{ context.imageClicked(adapterPosition) }
+            if(context is ReadActivity) image.setOnClickListener{ context.clickImage(adapterPosition) }
+            else if(context is AbstractWriteActivity) image.setOnClickListener{ context.clickImage(adapterPosition) }
         }
 
     }

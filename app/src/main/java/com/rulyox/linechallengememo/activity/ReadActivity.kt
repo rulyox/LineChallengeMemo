@@ -53,16 +53,29 @@ class ReadActivity: AppCompatActivity() {
             R.id.read_menu_edit -> {
                 val editIntent = Intent(this@ReadActivity, EditWriteActivity::class.java)
                 editIntent.putExtra("memoId", memoId)
-                startActivity(editIntent)
+                startActivityForResult(editIntent, 1)
                 true
             }
             R.id.read_menu_delete -> {
                 deleteMemo()
-                finishAndRefresh()
+                setRefresh()
+                finish()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        val doRefresh = data?.getBooleanExtra("refresh", false)
+
+        if(doRefresh != null && doRefresh) {
+            getMemoData()
+            setRefresh()
+        }
+
     }
 
     private fun initUI() {
@@ -121,16 +134,6 @@ class ReadActivity: AppCompatActivity() {
 
     }
 
-    private fun finishAndRefresh() {
-
-        val finishIntent = Intent()
-        finishIntent.putExtra("refresh", true)
-        setResult(Activity.RESULT_OK, finishIntent)
-
-        finish()
-
-    }
-
     private fun deleteMemo() {
 
         val appRepository = AppRepository(application)
@@ -155,7 +158,7 @@ class ReadActivity: AppCompatActivity() {
 
     }
 
-    fun imageClicked(position: Int) {
+    fun clickImage(position: Int) {
 
         val imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         val imgFile = File(imgDir, "${imgStringList[position]}.jpg")
@@ -169,6 +172,14 @@ class ReadActivity: AppCompatActivity() {
             startActivity(showIntent)
 
         } else Toast.makeText(this@ReadActivity, R.string.error_image_not_found, Toast.LENGTH_SHORT).show()
+
+    }
+
+    private fun setRefresh() {
+
+        val finishIntent = Intent()
+        finishIntent.putExtra("refresh", true)
+        setResult(Activity.RESULT_OK, finishIntent)
 
     }
 

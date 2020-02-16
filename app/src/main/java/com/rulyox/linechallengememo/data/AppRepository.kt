@@ -17,6 +17,8 @@ class AppRepository(application: Application) {
 
     fun deleteMemo(memo: Memo) = runBlocking { memoDao.delete(memo) }
 
+    fun updateMemo(memo: Memo) = runBlocking { memoDao.update(memo) }
+
     fun addImage(image: Image) = runBlocking { imageDao.insert(image) }
 
     fun getImageByMemo(memoId: Int): List<String> = runBlocking { imageDao.selectImageByMemo(memoId) }

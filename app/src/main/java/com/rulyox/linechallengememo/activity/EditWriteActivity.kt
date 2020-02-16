@@ -109,7 +109,7 @@ class EditWriteActivity: AbstractWriteActivity() {
 
     }
 
-    override fun imageClicked(position: Int) {
+    override fun clickImage(position: Int) {
 
         val alertDialogBuilder = AlertDialog.Builder(this@EditWriteActivity)
         alertDialogBuilder.setItems(arrayOf(getString(R.string.write_dialog_show), getString(
@@ -153,8 +153,6 @@ class EditWriteActivity: AbstractWriteActivity() {
 
     }
 
-    override fun saveMemo() {}
-
     override fun deleteImage(position: Int) {
 
         imgDrawableList.removeAt(position)
@@ -170,6 +168,20 @@ class EditWriteActivity: AbstractWriteActivity() {
         }
 
         updateRecycler()
+
+    }
+
+    override fun saveMemo() {
+
+        val appRepository = AppRepository(application)
+
+        // save memo
+        val editedMemo = Memo(memoId, write_edit_title.text.toString(), write_edit_text.text.toString())
+        appRepository.updateMemo(editedMemo)
+
+        Toast.makeText(this@EditWriteActivity, R.string.write_edited, Toast.LENGTH_SHORT).show()
+
+        TODO("Handle image changes")
 
     }
 

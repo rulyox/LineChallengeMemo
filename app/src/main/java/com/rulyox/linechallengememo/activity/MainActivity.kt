@@ -90,8 +90,8 @@ class MainActivity: AppCompatActivity() {
 
     }
 
-    // onclick recycler view item
-    fun memoClicked(id: Int) {
+    // onclick recycler view memo
+    fun clickMemo(id: Int) {
 
         val readIntent = Intent(this@MainActivity, ReadActivity::class.java)
         readIntent.putExtra("id", id)

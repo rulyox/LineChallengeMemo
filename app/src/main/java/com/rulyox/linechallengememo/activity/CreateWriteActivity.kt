@@ -50,7 +50,7 @@ class CreateWriteActivity: AbstractWriteActivity() {
 
     }
 
-    override fun imageClicked(position: Int) {
+    override fun clickImage(position: Int) {
 
         val alertDialogBuilder = AlertDialog.Builder(this@CreateWriteActivity)
         alertDialogBuilder.setItems(arrayOf(getString(R.string.write_dialog_show), getString(
@@ -90,6 +90,14 @@ class CreateWriteActivity: AbstractWriteActivity() {
 
     }
 
+    override fun deleteImage(position: Int) {
+
+        imgDrawableList.removeAt(position)
+
+        updateRecycler()
+
+    }
+
     override fun saveMemo() {
 
         val appRepository = AppRepository(application)
@@ -108,14 +116,6 @@ class CreateWriteActivity: AbstractWriteActivity() {
         }
 
         Toast.makeText(this@CreateWriteActivity, R.string.write_saved, Toast.LENGTH_SHORT).show()
-
-    }
-
-    override fun deleteImage(position: Int) {
-
-        imgDrawableList.removeAt(position)
-
-        updateRecycler()
 
     }
 

@@ -26,7 +26,7 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
 
     abstract fun saveMemo()
 
-    abstract fun imageClicked(position: Int)
+    abstract fun clickImage(position: Int)
 
     abstract fun deleteImage(position: Int)
 
@@ -43,7 +43,8 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
             }
             R.id.write_menu_save -> {
                 saveMemo()
-                finishAndRefresh()
+                setRefresh()
+                finish()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -135,13 +136,11 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
 
     }
 
-    private fun finishAndRefresh() {
+    private fun setRefresh() {
 
         val finishIntent = Intent()
         finishIntent.putExtra("refresh", true)
         setResult(Activity.RESULT_OK, finishIntent)
-
-        finish()
 
     }
 
