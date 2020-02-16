@@ -10,24 +10,20 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="110dp"
-        android:padding="15dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
         android:foreground="?selectableItemBackground"
         android:clickable="true"
         android:focusable="true" >
 
-        <ImageView
-            android:id="@+id/item_thumb"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:scaleType="centerCrop"
-            android:contentDescription="@null"/>
-
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="80dp"
             android:orientation="vertical"
-            android:gravity="center_vertical"
-            android:layout_marginStart="15dp" >
+            android:gravity="center_vertical" >
 
             <TextView
                 android:id="@+id/item_title"
@@ -47,6 +43,14 @@
                 android:fontFamily="@font/nanum_gothic" />
 
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/item_thumb"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="15dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@null" />
 
     </LinearLayout>
 
