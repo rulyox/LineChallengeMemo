@@ -176,7 +176,7 @@ class EditWriteActivity: AbstractWriteActivity() {
     override fun saveMemo() {
 
         // save memo
-        val editedMemo = Memo(memoId, write_edit_title.text.toString(), write_edit_text.text.toString())
+        val editedMemo = Memo(memoId, write_edit_title.text.toString(), write_edit_text.text.toString(), System.currentTimeMillis())
         appRepository.updateMemo(editedMemo)
 
         // delete image files

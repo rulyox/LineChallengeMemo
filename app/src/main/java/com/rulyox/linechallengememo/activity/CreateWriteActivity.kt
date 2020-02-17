@@ -104,7 +104,7 @@ class CreateWriteActivity: AbstractWriteActivity() {
     override fun saveMemo() {
 
         // save memo
-        val newMemo = Memo(null, write_edit_title.text.toString(), write_edit_text.text.toString())
+        val newMemo = Memo(null, write_edit_title.text.toString(), write_edit_text.text.toString(), System.currentTimeMillis())
         val newId: Int = appRepository.addMemo(newMemo).toInt()
 
         // save images

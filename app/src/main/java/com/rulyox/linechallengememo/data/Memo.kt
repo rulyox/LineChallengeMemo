@@ -8,6 +8,7 @@ data class Memo(
 
     @PrimaryKey(autoGenerate = true) val id: Int?,
     val title: String,
-    val text: String
+    val text: String,
+    val time: Long
 
 )

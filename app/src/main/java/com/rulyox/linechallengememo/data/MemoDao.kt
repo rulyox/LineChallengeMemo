@@ -5,7 +5,7 @@ import androidx.room.*
 @Dao
 interface MemoDao {
 
-    @Query("SELECT * FROM memo")
+    @Query("SELECT * FROM memo ORDER BY memo.time DESC")
     suspend fun selectAll(): List<Memo>
 
     @Query("SELECT * FROM memo WHERE id = :id")

@@ -17,7 +17,6 @@
     <string name="write_edited">Memo edited.</string>
     <string name="write_dialog_show">Show Image</string>
     <string name="write_dialog_delete">Delete Image</string>
-    <string name="read_label">Memo</string>
     <string name="read_deleted">Memo deleted.</string>
     <string name="error_image_not_found">Image is not found!</string>
 </resources>

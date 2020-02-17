@@ -71,9 +71,8 @@ class MainActivity: AppCompatActivity() {
     private fun getMemoList() {
 
         val memoList: List<Memo> = appRepository.getAllMemo()
-        val memoNum: Int = appRepository.getAllMemo().size
 
-        if(memoNum > 0) {
+        if(memoList.isNotEmpty()) {
 
             main_text_empty.visibility = View.GONE
             main_recycler_memo.visibility = View.VISIBLE
