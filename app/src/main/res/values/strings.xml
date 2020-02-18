@@ -18,5 +18,7 @@
     <string name="write_dialog_show">Show Image</string>
     <string name="write_dialog_delete">Delete Image</string>
     <string name="read_deleted">Memo deleted.</string>
+    <string name="search_label">Search</string>
+    <string name="search_query_hint">Write text to search.</string>
     <string name="error_image_not_found">Image is not found!</string>
 </resources>

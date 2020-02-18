@@ -13,6 +13,8 @@ class AppRepository(application: Application) {
 
     fun getMemoById(id: Int): Memo = runBlocking { memoDao.selectById(id) }
 
+    fun getMemoByQuery(query: String): List<Memo> = runBlocking { memoDao.selectByQuery("%${query}%") }
+
     fun addMemo(memo: Memo): Long = runBlocking { memoDao.insert(memo) }
 
     fun deleteMemo(memo: Memo) = runBlocking { memoDao.delete(memo) }

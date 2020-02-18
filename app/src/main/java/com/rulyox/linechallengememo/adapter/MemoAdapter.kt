@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.rulyox.linechallengememo.R
 import com.rulyox.linechallengememo.activity.MainActivity
+import com.rulyox.linechallengememo.activity.SearchActivity
 import com.rulyox.linechallengememo.data.AppRepository
 import com.rulyox.linechallengememo.data.Memo
 import java.io.File
@@ -34,7 +35,8 @@ class MemoAdapter(private val memoList: List<Memo>, context: Context): RecyclerV
         val thumb: ImageView = view.findViewById(R.id.item_thumb)
 
         init {
-            parent.setOnClickListener { (context as MainActivity).clickMemo(memoList[adapterPosition].id!!) }
+            if(context is MainActivity) parent.setOnClickListener { context.clickMemo(memoList[adapterPosition].id!!) }
+            else if(context is SearchActivity) parent.setOnClickListener { context.clickMemo(memoList[adapterPosition].id!!) }
         }
 
     }
