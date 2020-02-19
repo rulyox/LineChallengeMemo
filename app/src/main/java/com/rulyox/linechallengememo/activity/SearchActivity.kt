@@ -1,5 +1,6 @@
 package com.rulyox.linechallengememo.activity
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
@@ -14,6 +15,11 @@ import kotlinx.android.synthetic.main.activity_search.*
 class SearchActivity: AppCompatActivity() {
 
     private lateinit var appRepository: AppRepository
+    private var searchQuery: String = ""
+
+    companion object {
+        const val INTENT_READ = 1
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,9 +44,28 @@ class SearchActivity: AppCompatActivity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(resultCode == Activity.RESULT_OK) {
+
+            val doRefresh = data?.getBooleanExtra("refresh", false)
+
+            if(doRefresh != null && doRefresh) {
+                getMemoList(searchQuery)
+                setRefresh()
+            }
+
+        }
+
+    }
+
     private fun initUI() {
 
-        search_button_search.setOnClickListener{ getMemoList(search_edit_query.text.toString()) }
+        search_button_search.setOnClickListener{
+            searchQuery = search_edit_query.text.toString()
+            if(searchQuery != "") getMemoList(searchQuery)
+        }
 
         // recycler view
         search_recycler_memo.layoutManager = LinearLayoutManager(this)
@@ -63,7 +88,15 @@ class SearchActivity: AppCompatActivity() {
 
         val readIntent = Intent(this@SearchActivity, ReadActivity::class.java)
         readIntent.putExtra("id", id)
-        startActivity(readIntent)
+        startActivityForResult(readIntent, INTENT_READ)
+
+    }
+
+    private fun setRefresh() {
+
+        val finishIntent = Intent()
+        finishIntent.putExtra("refresh", true)
+        setResult(Activity.RESULT_OK, finishIntent)
 
     }
 

@@ -28,6 +28,10 @@ class ReadActivity: AppCompatActivity() {
     private var imgList: List<Image> = listOf()
     private lateinit var appRepository: AppRepository
 
+    companion object {
+        const val INTENT_EDIT = 1
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_read)
@@ -57,7 +61,7 @@ class ReadActivity: AppCompatActivity() {
             R.id.read_menu_edit -> {
                 val editIntent = Intent(this@ReadActivity, EditWriteActivity::class.java)
                 editIntent.putExtra("memoId", memoId)
-                startActivityForResult(editIntent, 1)
+                startActivityForResult(editIntent, INTENT_EDIT)
                 true
             }
             R.id.read_menu_delete -> {
@@ -73,11 +77,15 @@ class ReadActivity: AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        val doRefresh = data?.getBooleanExtra("refresh", false)
+        if(resultCode == Activity.RESULT_OK) {
 
-        if(doRefresh != null && doRefresh) {
-            getMemoData()
-            setRefresh()
+            val doRefresh = data?.getBooleanExtra("refresh", false)
+
+            if(doRefresh != null && doRefresh) {
+                getMemoData()
+                setRefresh()
+            }
+
         }
 
     }

@@ -1,5 +1,6 @@
 package com.rulyox.linechallengememo.activity
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -16,6 +17,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity: AppCompatActivity() {
 
     private lateinit var appRepository: AppRepository
+
+    companion object {
+        const val INTENT_CREATE = 1
+        const val INTENT_READ = 2
+        const val INTENT_SEARCH = 3
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +46,7 @@ class MainActivity: AppCompatActivity() {
         return when (item.itemId) {
             R.id.main_menu_search -> {
                 val searchIntent = Intent(this@MainActivity, SearchActivity::class.java)
-                startActivity(searchIntent)
+                startActivityForResult(searchIntent, INTENT_SEARCH)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -49,9 +56,13 @@ class MainActivity: AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        val doRefresh = data?.getBooleanExtra("refresh", false)
+        if(resultCode == Activity.RESULT_OK) {
 
-        if(doRefresh != null && doRefresh) getMemoList()
+            val doRefresh = data?.getBooleanExtra("refresh", false)
+
+            if(doRefresh != null && doRefresh) getMemoList()
+
+        }
 
     }
 
@@ -61,7 +72,7 @@ class MainActivity: AppCompatActivity() {
         main_button_add.setOnClickListener {
 
             val createIntent = Intent(this@MainActivity, CreateWriteActivity::class.java)
-            startActivityForResult(createIntent, 1)
+            startActivityForResult(createIntent, INTENT_CREATE)
 
         }
 
@@ -98,7 +109,7 @@ class MainActivity: AppCompatActivity() {
 
         val readIntent = Intent(this@MainActivity, ReadActivity::class.java)
         readIntent.putExtra("id", id)
-        startActivityForResult(readIntent, 2)
+        startActivityForResult(readIntent, INTENT_READ)
 
     }
 

@@ -22,6 +22,10 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
 
     protected var imgDrawableList: MutableList<Drawable> = mutableListOf()
 
+    companion object {
+        const val INTENT_GALLERY = 1
+    }
+
     abstract fun initUI()
 
     abstract fun saveMemo()
@@ -56,7 +60,7 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
 
         if(resultCode == Activity.RESULT_OK) {
 
-            if(requestCode == 1) { gotImageGallery(data!!) }
+            if(requestCode == INTENT_GALLERY) { gotImageGallery(data!!) }
 
         }
 
@@ -67,7 +71,7 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
         val pickIntent = Intent(Intent.ACTION_GET_CONTENT)
         pickIntent.type = "image/*"
 
-        startActivityForResult(pickIntent, 1)
+        startActivityForResult(pickIntent, INTENT_GALLERY)
 
     }
 

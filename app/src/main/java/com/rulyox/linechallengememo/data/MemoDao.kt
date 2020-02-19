@@ -11,7 +11,7 @@ interface MemoDao {
     @Query("SELECT * FROM memo WHERE id = :id")
     suspend fun selectById(id: Int): Memo
 
-    @Query("SELECT * FROM memo WHERE title LIKE :query OR text LIKE :query")
+    @Query("SELECT * FROM memo WHERE title LIKE :query OR text LIKE :query ORDER BY memo.time DESC")
     suspend fun selectByQuery(query: String): List<Memo>
 
     @Insert
