@@ -7,10 +7,12 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Environment
+import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import com.rulyox.linechallengememo.R
 import com.rulyox.linechallengememo.adapter.ImageAdapter
 import kotlinx.android.synthetic.main.activity_write.*
@@ -24,6 +26,7 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
 
     companion object {
         const val INTENT_GALLERY = 1
+        const val INTENT_CAMERA = 2
     }
 
     abstract fun initUI()
@@ -61,6 +64,7 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
         if(resultCode == Activity.RESULT_OK) {
 
             if(requestCode == INTENT_GALLERY) { gotImageGallery(data!!) }
+            else if(requestCode == INTENT_CAMERA) { gotImageCamera() }
 
         }
 
@@ -85,6 +89,37 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
         imgDrawableList.add(imgDrawable)
 
         updateRecycler()
+
+    }
+
+    fun getImageCamera() {
+
+        val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_camera.jpg")
+
+        val photoURI: Uri = FileProvider.getUriForFile(this, "com.rulyox.linechallengememo.fileprovider", imgFile)
+
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+        startActivityForResult(takePictureIntent, INTENT_CAMERA)
+
+    }
+
+    private fun gotImageCamera() {
+
+        val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_camera.jpg")
+
+        if(imgFile.exists()) {
+
+            val imgPath: String = imgFile.absolutePath
+            val imgDrawable: Drawable = Drawable.createFromPath(imgPath)!!
+
+            imgDrawableList.add(imgDrawable)
+
+            updateRecycler()
+
+            imgFile.delete()
+
+        }
 
     }
 

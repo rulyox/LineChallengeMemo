@@ -43,7 +43,7 @@ class CreateWriteActivity: AbstractWriteActivity() {
         write_navigation_image.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.write_menu_gallery -> { getImageGallery() }
-                R.id.write_menu_camera -> { }
+                R.id.write_menu_camera -> { getImageCamera() }
                 R.id.write_menu_url -> { }
             }
             true
@@ -66,7 +66,7 @@ class CreateWriteActivity: AbstractWriteActivity() {
                 // image is currently not saved in storage. save temp image
                 val imgBmp: Bitmap = (imgDrawableList[position] as BitmapDrawable).bitmap
 
-                val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp.jpg")
+                val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_show.jpg")
                 val imgPath: String = imgFile.absolutePath
 
                 val imgFileStream = FileOutputStream(imgPath)

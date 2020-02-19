@@ -7,14 +7,12 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Environment
 import android.text.SpannableStringBuilder
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.rulyox.linechallengememo.R
-import com.rulyox.linechallengememo.adapter.ImageAdapter
 import com.rulyox.linechallengememo.data.AppRepository
 import com.rulyox.linechallengememo.data.Image
 import com.rulyox.linechallengememo.data.Memo
@@ -53,7 +51,7 @@ class EditWriteActivity: AbstractWriteActivity() {
         write_navigation_image.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.write_menu_gallery -> { getImageGallery() }
-                R.id.write_menu_camera -> { }
+                R.id.write_menu_camera -> { getImageCamera() }
                 R.id.write_menu_url -> { }
             }
             true
@@ -130,7 +128,7 @@ class EditWriteActivity: AbstractWriteActivity() {
                     // image is currently not saved in storage. save temp image
                     val imgBmp: Bitmap = (imgDrawableList[position] as BitmapDrawable).bitmap
 
-                    val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp.jpg")
+                    val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_show.jpg")
                     val imgPath: String = imgFile.absolutePath
 
                     val imgFileStream = FileOutputStream(imgPath)
