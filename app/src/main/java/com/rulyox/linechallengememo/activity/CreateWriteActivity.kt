@@ -44,7 +44,7 @@ class CreateWriteActivity: AbstractWriteActivity() {
             when(item.itemId) {
                 R.id.write_menu_gallery -> { getImageGallery() }
                 R.id.write_menu_camera -> { getImageCamera() }
-                R.id.write_menu_url -> { }
+                R.id.write_menu_url -> { getImageUrl() }
             }
             true
         }
@@ -96,7 +96,6 @@ class CreateWriteActivity: AbstractWriteActivity() {
     override fun deleteImage(position: Int) {
 
         imgDrawableList.removeAt(position)
-
         updateRecycler()
 
     }

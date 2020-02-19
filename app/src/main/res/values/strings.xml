@@ -17,6 +17,10 @@
     <string name="write_edited">Memo edited.</string>
     <string name="write_dialog_show">Show Image</string>
     <string name="write_dialog_delete">Delete Image</string>
+    <string name="write_dialog_internet">Get image from internet</string>
+    <string name="write_dialog_url">Enter URL here.</string>
+    <string name="write_dialog_ok">OK</string>
+    <string name="write_dialog_cancel">Cancel</string>
     <string name="read_deleted">Memo deleted.</string>
     <string name="search_label">Search</string>
     <string name="search_query_hint">Write text to search.</string>

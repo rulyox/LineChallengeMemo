@@ -52,7 +52,7 @@ class EditWriteActivity: AbstractWriteActivity() {
             when(item.itemId) {
                 R.id.write_menu_gallery -> { getImageGallery() }
                 R.id.write_menu_camera -> { getImageCamera() }
-                R.id.write_menu_url -> { }
+                R.id.write_menu_url -> { getImageUrl() }
             }
             true
         }
@@ -160,14 +160,13 @@ class EditWriteActivity: AbstractWriteActivity() {
     override fun deleteImage(position: Int) {
 
         imgDrawableList.removeAt(position)
+        updateRecycler()
 
         // add to deletedImgList
         if(existedImgList.size > position) {
             deletedImgList.add(existedImgList[position])
             existedImgList.removeAt(position)
         }
-
-        updateRecycler()
 
     }
 

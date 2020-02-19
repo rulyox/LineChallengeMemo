@@ -11,14 +11,21 @@ import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.FrameLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import com.rulyox.linechallengememo.R
 import com.rulyox.linechallengememo.adapter.ImageAdapter
 import kotlinx.android.synthetic.main.activity_write.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
+import java.net.URL
 
 abstract class AbstractWriteActivity: AppCompatActivity() {
 
@@ -87,7 +94,6 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
         imgStream.close()
 
         imgDrawableList.add(imgDrawable)
-
         updateRecycler()
 
     }
@@ -114,12 +120,53 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
             val imgDrawable: Drawable = Drawable.createFromPath(imgPath)!!
 
             imgDrawableList.add(imgDrawable)
-
             updateRecycler()
 
             imgFile.delete()
 
         }
+
+    }
+
+    fun getImageUrl() {
+
+        val dpi: Float = resources.displayMetrics.density
+
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        alertDialogBuilder.setTitle(resources.getText(R.string.write_dialog_internet))
+
+        val container = FrameLayout(this)
+        val params = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        params.setMargins((20*dpi).toInt(), (10*dpi).toInt(), (20*dpi).toInt(), (10*dpi).toInt())
+        val editText = EditText(this)
+        editText.hint = resources.getText(R.string.write_dialog_url)
+        editText.layoutParams = params
+        container.addView(editText)
+        alertDialogBuilder.setView(container)
+
+        alertDialogBuilder.setPositiveButton(resources.getText(R.string.write_dialog_ok), ({ dialog, which ->
+
+            val url: String = editText.text.toString()
+
+            // download image in new thread
+            GlobalScope.launch {
+
+                val inputStream = URL(url).content as InputStream
+                val imgDrawable: Drawable = Drawable.createFromStream(inputStream, url)
+
+                // update view in main thread
+                runOnUiThread {
+                    imgDrawableList.add(imgDrawable)
+                    updateRecycler()
+                }
+
+            }
+
+            dialog.dismiss()
+
+        }))
+        alertDialogBuilder.setNegativeButton(resources.getText(R.string.write_dialog_cancel), ({ dialog, which -> dialog.dismiss() }))
+        alertDialogBuilder.create().show()
 
     }
 
