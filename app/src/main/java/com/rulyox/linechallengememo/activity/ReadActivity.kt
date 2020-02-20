@@ -153,8 +153,8 @@ class ReadActivity: AppCompatActivity() {
     private fun deleteMemo() {
 
         val alertDialogBuilder = AlertDialog.Builder(this)
-        alertDialogBuilder.setMessage(resources.getText(R.string.read_dialog_delete))
-        alertDialogBuilder.setPositiveButton(resources.getText(R.string.dialog_yes), ({ dialog, _ ->
+        alertDialogBuilder.setMessage(R.string.read_dialog_delete)
+        alertDialogBuilder.setPositiveButton(R.string.dialog_yes, ({ dialog, _ ->
 
             // delete images
             for(img in imgList) {
@@ -178,7 +178,7 @@ class ReadActivity: AppCompatActivity() {
             finish()
 
         }))
-        alertDialogBuilder.setNegativeButton(resources.getText(R.string.dialog_no), ({ dialog, _ -> dialog.dismiss() }))
+        alertDialogBuilder.setNegativeButton(R.string.dialog_no, ({ dialog, _ -> dialog.dismiss() }))
         alertDialogBuilder.create().show()
 
     }

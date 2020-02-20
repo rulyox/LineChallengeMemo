@@ -11,6 +11,7 @@ import android.provider.MediaStore
 import android.view.*
 import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
@@ -22,6 +23,7 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
+import java.lang.Exception
 import java.net.URL
 
 abstract class AbstractWriteActivity: AppCompatActivity() {
@@ -134,7 +136,7 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
         val dpi: Float = resources.displayMetrics.density
 
         val alertDialogBuilder = AlertDialog.Builder(this)
-        alertDialogBuilder.setTitle(resources.getText(R.string.write_dialog_internet))
+        alertDialogBuilder.setTitle(R.string.write_dialog_internet)
 
         val container = FrameLayout(this)
         val params = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -142,23 +144,34 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
         val editText = EditText(this)
         editText.hint = resources.getText(R.string.write_dialog_url)
         editText.layoutParams = params
+        editText.layoutParams = params
         container.addView(editText)
         alertDialogBuilder.setView(container)
 
-        alertDialogBuilder.setPositiveButton(resources.getText(R.string.dialog_ok), ({ dialog, _ ->
+        alertDialogBuilder.setPositiveButton(R.string.dialog_ok, ({ dialog, _ ->
 
             val url: String = editText.text.toString()
 
             // download image in new thread
             GlobalScope.launch {
 
-                val inputStream = URL(url).content as InputStream
-                val imgDrawable: Drawable = Drawable.createFromStream(inputStream, url)
+                try {
 
-                // update view in main thread
-                runOnUiThread {
-                    imgDrawableList.add(imgDrawable)
-                    updateRecycler()
+                    val inputStream = URL(url).content as InputStream
+                    val imgDrawable: Drawable = Drawable.createFromStream(inputStream, url)
+
+                    // update view in main thread
+                    runOnUiThread {
+                        imgDrawableList.add(imgDrawable)
+                        updateRecycler()
+                    }
+
+                } catch(error: Exception) { // handle url or image error
+
+                    runOnUiThread {
+                        Toast.makeText(this@AbstractWriteActivity, R.string.error_url, Toast.LENGTH_SHORT).show()
+                    }
+
                 }
 
             }
@@ -166,7 +179,7 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
             dialog.dismiss()
 
         }))
-        alertDialogBuilder.setNegativeButton(resources.getText(R.string.dialog_cancel), ({ dialog, _ -> dialog.dismiss() }))
+        alertDialogBuilder.setNegativeButton(R.string.dialog_cancel, ({ dialog, _ -> dialog.dismiss() }))
         alertDialogBuilder.create().show()
 
     }
@@ -225,15 +238,17 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
     private fun showCancelDialog() {
 
         val alertDialogBuilder = AlertDialog.Builder(this)
-        alertDialogBuilder.setMessage(resources.getText(R.string.write_dialog_cancel))
-        alertDialogBuilder.setPositiveButton(resources.getText(R.string.dialog_yes), ({ dialog, _ ->
+        alertDialogBuilder.setMessage(R.string.write_dialog_cancel)
+        alertDialogBuilder.setPositiveButton(R.string.dialog_yes, ({ dialog, _ ->
 
             dialog.dismiss()
+
+            Toast.makeText(this, R.string.write_canceled, Toast.LENGTH_SHORT).show()
 
             finish()
 
         }))
-        alertDialogBuilder.setNegativeButton(resources.getText(R.string.dialog_no), ({ dialog, _ -> dialog.dismiss() }))
+        alertDialogBuilder.setNegativeButton(R.string.dialog_no, ({ dialog, _ -> dialog.dismiss() }))
         alertDialogBuilder.create().show()
 
     }
