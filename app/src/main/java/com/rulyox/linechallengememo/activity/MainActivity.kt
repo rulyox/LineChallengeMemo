@@ -45,7 +45,7 @@ class MainActivity: AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.main_menu_search -> {
-                val searchIntent = Intent(this@MainActivity, SearchActivity::class.java)
+                val searchIntent = Intent(this, SearchActivity::class.java)
                 startActivityForResult(searchIntent, INTENT_SEARCH)
                 true
             }
@@ -71,7 +71,7 @@ class MainActivity: AppCompatActivity() {
         // add button
         main_button_add.setOnClickListener {
 
-            val createIntent = Intent(this@MainActivity, CreateWriteActivity::class.java)
+            val createIntent = Intent(this, CreateWriteActivity::class.java)
             startActivityForResult(createIntent, INTENT_CREATE)
 
         }
@@ -107,7 +107,7 @@ class MainActivity: AppCompatActivity() {
     // onclick recycler view memo
     fun clickMemo(id: Int) {
 
-        val readIntent = Intent(this@MainActivity, ReadActivity::class.java)
+        val readIntent = Intent(this, ReadActivity::class.java)
         readIntent.putExtra("id", id)
         startActivityForResult(readIntent, INTENT_READ)
 

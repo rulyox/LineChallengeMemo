@@ -27,11 +27,11 @@
         <activity
             android:name=".activity.CreateWriteActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize|stateVisible" />
         <activity
             android:name=".activity.EditWriteActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize|stateVisible" />
         <activity
             android:name=".activity.ReadActivity"
             android:screenOrientation="portrait"
@@ -39,7 +39,7 @@
         <activity
             android:name=".activity.SearchActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize|stateVisible" />
         <activity
             android:name=".activity.ShowImageActivity"
             android:theme="@style/ShowImageTheme"/>

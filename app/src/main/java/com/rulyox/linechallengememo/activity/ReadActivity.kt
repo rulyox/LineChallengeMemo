@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -59,15 +60,13 @@ class ReadActivity: AppCompatActivity() {
                 true
             }
             R.id.read_menu_edit -> {
-                val editIntent = Intent(this@ReadActivity, EditWriteActivity::class.java)
+                val editIntent = Intent(this, EditWriteActivity::class.java)
                 editIntent.putExtra("memoId", memoId)
                 startActivityForResult(editIntent, INTENT_EDIT)
                 true
             }
             R.id.read_menu_delete -> {
                 deleteMemo()
-                setRefresh()
-                finish()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -135,7 +134,7 @@ class ReadActivity: AppCompatActivity() {
 
                 } else {
 
-                    val imgDrawable: Drawable = ContextCompat.getDrawable(this@ReadActivity, R.drawable.img_not_found)!!
+                    val imgDrawable: Drawable = ContextCompat.getDrawable(this, R.drawable.img_not_found)!!
                     imgDrawableList.add(imgDrawable)
 
                 }
@@ -153,21 +152,34 @@ class ReadActivity: AppCompatActivity() {
 
     private fun deleteMemo() {
 
-        // delete images
-        for(img in imgList) {
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        alertDialogBuilder.setMessage(resources.getText(R.string.read_dialog_delete))
+        alertDialogBuilder.setPositiveButton(resources.getText(R.string.dialog_yes), ({ dialog, _ ->
 
-            val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${img.file}.jpg")
-            if(imgFile.exists()) imgFile.delete()
+            // delete images
+            for(img in imgList) {
 
-            val thumbFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${img.file}_thumb.jpg")
-            if(thumbFile.exists()) thumbFile.delete()
+                val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${img.file}.jpg")
+                if(imgFile.exists()) imgFile.delete()
 
-        }
+                val thumbFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${img.file}_thumb.jpg")
+                if(thumbFile.exists()) thumbFile.delete()
 
-        val memo: Memo = appRepository.getMemoById(memoId)
-        appRepository.deleteMemo(memo)
+            }
 
-        Toast.makeText(this@ReadActivity, R.string.read_deleted, Toast.LENGTH_SHORT).show()
+            val memo: Memo = appRepository.getMemoById(memoId)
+            appRepository.deleteMemo(memo)
+
+            dialog.dismiss()
+
+            Toast.makeText(this, R.string.read_deleted, Toast.LENGTH_SHORT).show()
+
+            setRefresh()
+            finish()
+
+        }))
+        alertDialogBuilder.setNegativeButton(resources.getText(R.string.dialog_no), ({ dialog, _ -> dialog.dismiss() }))
+        alertDialogBuilder.create().show()
 
     }
 
@@ -179,11 +191,11 @@ class ReadActivity: AppCompatActivity() {
 
             val imgPath: String = imgFile.absolutePath
 
-            val showIntent = Intent(this@ReadActivity, ShowImageActivity::class.java)
+            val showIntent = Intent(this, ShowImageActivity::class.java)
             showIntent.putExtra("path", imgPath)
             startActivity(showIntent)
 
-        } else Toast.makeText(this@ReadActivity, R.string.error_image_not_found, Toast.LENGTH_SHORT).show()
+        } else Toast.makeText(this, R.string.error_image_not_found, Toast.LENGTH_SHORT).show()
 
     }
 

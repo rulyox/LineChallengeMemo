@@ -58,7 +58,9 @@
                 android:maxLines="1"
                 android:fontFamily="@font/nanum_gothic"
                 android:hint="@string/search_query_hint"
-                android:importantForAutofill="no" />
+                android:importantForAutofill="no" >
+                <requestFocus />
+            </EditText>
 
             <Button
                 android:id="@+id/search_button_search"

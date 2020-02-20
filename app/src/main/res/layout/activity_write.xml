@@ -51,7 +51,9 @@
             android:maxLines="1"
             android:fontFamily="@font/nanum_gothic"
             android:hint="@string/write_title_hint"
-            android:importantForAutofill="no" />
+            android:importantForAutofill="no" >
+            <requestFocus />
+        </EditText>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/write_recycler_image"

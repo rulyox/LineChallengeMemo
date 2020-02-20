@@ -8,10 +8,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.EditText
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
@@ -52,17 +49,21 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                finish()
+                showCancelDialog()
                 true
             }
             R.id.write_menu_save -> {
                 saveMemo()
-                setRefresh()
-                finish()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onBackPressed() {
+
+        showCancelDialog()
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -144,7 +145,7 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
         container.addView(editText)
         alertDialogBuilder.setView(container)
 
-        alertDialogBuilder.setPositiveButton(resources.getText(R.string.write_dialog_ok), ({ dialog, which ->
+        alertDialogBuilder.setPositiveButton(resources.getText(R.string.dialog_ok), ({ dialog, _ ->
 
             val url: String = editText.text.toString()
 
@@ -165,7 +166,7 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
             dialog.dismiss()
 
         }))
-        alertDialogBuilder.setNegativeButton(resources.getText(R.string.write_dialog_cancel), ({ dialog, which -> dialog.dismiss() }))
+        alertDialogBuilder.setNegativeButton(resources.getText(R.string.dialog_cancel), ({ dialog, _ -> dialog.dismiss() }))
         alertDialogBuilder.create().show()
 
     }
@@ -221,7 +222,23 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
 
     }
 
-    private fun setRefresh() {
+    private fun showCancelDialog() {
+
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        alertDialogBuilder.setMessage(resources.getText(R.string.write_dialog_cancel))
+        alertDialogBuilder.setPositiveButton(resources.getText(R.string.dialog_yes), ({ dialog, _ ->
+
+            dialog.dismiss()
+
+            finish()
+
+        }))
+        alertDialogBuilder.setNegativeButton(resources.getText(R.string.dialog_no), ({ dialog, _ -> dialog.dismiss() }))
+        alertDialogBuilder.create().show()
+
+    }
+
+    fun setRefresh() {
 
         val finishIntent = Intent()
         finishIntent.putExtra("refresh", true)

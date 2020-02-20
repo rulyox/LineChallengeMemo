@@ -19,10 +19,16 @@
     <string name="write_dialog_delete">Delete Image</string>
     <string name="write_dialog_internet">Get image from internet</string>
     <string name="write_dialog_url">Enter URL here.</string>
-    <string name="write_dialog_ok">OK</string>
-    <string name="write_dialog_cancel">Cancel</string>
+    <string name="write_dialog_cancel">Will you cancel writing this memo?</string>
     <string name="read_deleted">Memo deleted.</string>
+    <string name="read_dialog_delete">Are you sure to delete this memo?</string>
     <string name="search_label">Search</string>
     <string name="search_query_hint">Write text to search.</string>
+    <string name="dialog_yes">Yes</string>
+    <string name="dialog_no">No</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="error_empty_box">There is a empty box!</string>
+    <string name="error_empty_query">Query is empty!</string>
     <string name="error_image_not_found">Image is not found!</string>
 </resources>

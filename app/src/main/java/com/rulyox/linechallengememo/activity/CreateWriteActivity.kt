@@ -56,7 +56,7 @@ class CreateWriteActivity: AbstractWriteActivity() {
 
     override fun clickImage(position: Int) {
 
-        val alertDialogBuilder = AlertDialog.Builder(this@CreateWriteActivity)
+        val alertDialogBuilder = AlertDialog.Builder(this)
         alertDialogBuilder.setItems(arrayOf(getString(R.string.write_dialog_show), getString(
             R.string.write_dialog_delete
         ))) { dialog, id ->
@@ -73,7 +73,7 @@ class CreateWriteActivity: AbstractWriteActivity() {
                 imgBmp.compress(Bitmap.CompressFormat.JPEG, 100, imgFileStream)
                 imgFileStream.close()
 
-                val showIntent = Intent(this@CreateWriteActivity, ShowImageActivity::class.java)
+                val showIntent = Intent(this, ShowImageActivity::class.java)
                 showIntent.putExtra("path", imgPath)
                 showIntent.putExtra("temp", true)
                 startActivity(showIntent)
@@ -102,8 +102,16 @@ class CreateWriteActivity: AbstractWriteActivity() {
 
     override fun saveMemo() {
 
-        // save memo
-        val newMemo = Memo(null, write_edit_title.text.toString(), write_edit_text.text.toString(), System.currentTimeMillis())
+        val memoTitle: String = write_edit_title.text.toString()
+        val memoText: String = write_edit_text.text.toString()
+
+        // if empty
+        if(memoTitle == "" || memoText == "") {
+            Toast.makeText(this, R.string.error_empty_box, Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val newMemo = Memo(null, memoTitle, memoText, System.currentTimeMillis())
         val newId: Int = appRepository.addMemo(newMemo).toInt()
 
         // save images
@@ -115,7 +123,10 @@ class CreateWriteActivity: AbstractWriteActivity() {
 
         }
 
-        Toast.makeText(this@CreateWriteActivity, R.string.write_saved, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, R.string.write_saved, Toast.LENGTH_SHORT).show()
+
+        setRefresh()
+        finish()
 
     }
 

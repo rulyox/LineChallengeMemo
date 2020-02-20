@@ -87,7 +87,7 @@ class EditWriteActivity: AbstractWriteActivity() {
 
                 } else {
 
-                    val imgDrawable: Drawable = ContextCompat.getDrawable(this@EditWriteActivity, R.drawable.img_not_found)!!
+                    val imgDrawable: Drawable = ContextCompat.getDrawable(this, R.drawable.img_not_found)!!
                     imgDrawableList.add(imgDrawable)
 
                 }
@@ -102,7 +102,7 @@ class EditWriteActivity: AbstractWriteActivity() {
 
     override fun clickImage(position: Int) {
 
-        val alertDialogBuilder = AlertDialog.Builder(this@EditWriteActivity)
+        val alertDialogBuilder = AlertDialog.Builder(this)
         alertDialogBuilder.setItems(arrayOf(getString(R.string.write_dialog_show), getString(
             R.string.write_dialog_delete
         ))) { dialog, id ->
@@ -117,11 +117,11 @@ class EditWriteActivity: AbstractWriteActivity() {
 
                         val imgPath: String = imgFile.absolutePath
 
-                        val showIntent = Intent(this@EditWriteActivity, ShowImageActivity::class.java)
+                        val showIntent = Intent(this, ShowImageActivity::class.java)
                         showIntent.putExtra("path", imgPath)
                         startActivity(showIntent)
 
-                    } else Toast.makeText(this@EditWriteActivity, R.string.error_image_not_found, Toast.LENGTH_SHORT).show()
+                    } else Toast.makeText(this, R.string.error_image_not_found, Toast.LENGTH_SHORT).show()
 
                 } else { // newly added images
 
@@ -135,7 +135,7 @@ class EditWriteActivity: AbstractWriteActivity() {
                     imgBmp.compress(Bitmap.CompressFormat.JPEG, 100, imgFileStream)
                     imgFileStream.close()
 
-                    val showIntent = Intent(this@EditWriteActivity, ShowImageActivity::class.java)
+                    val showIntent = Intent(this, ShowImageActivity::class.java)
                     showIntent.putExtra("path", imgPath)
                     showIntent.putExtra("temp", true)
                     startActivity(showIntent)
@@ -172,8 +172,16 @@ class EditWriteActivity: AbstractWriteActivity() {
 
     override fun saveMemo() {
 
-        // save memo
-        val editedMemo = Memo(memoId, write_edit_title.text.toString(), write_edit_text.text.toString(), System.currentTimeMillis())
+        val memoTitle: String = write_edit_title.text.toString()
+        val memoText: String = write_edit_text.text.toString()
+
+        // if empty
+        if(memoTitle == "" || memoText == "") {
+            Toast.makeText(this, R.string.error_empty_box, Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val editedMemo = Memo(memoId, memoTitle, memoText, System.currentTimeMillis())
         appRepository.updateMemo(editedMemo)
 
         // delete image files
@@ -201,7 +209,10 @@ class EditWriteActivity: AbstractWriteActivity() {
 
         }
 
-        Toast.makeText(this@EditWriteActivity, R.string.write_edited, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, R.string.write_edited, Toast.LENGTH_SHORT).show()
+
+        setRefresh()
+        finish()
 
     }
 

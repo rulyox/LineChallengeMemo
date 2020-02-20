@@ -17,10 +17,16 @@
     <string name="write_dialog_delete">이미지 삭제</string>
     <string name="write_dialog_internet">인터넷에서 이미지 가져오기</string>
     <string name="write_dialog_url">여기에 URL을 입력하세요.</string>
-    <string name="write_dialog_ok">확인</string>
-    <string name="write_dialog_cancel">취소</string>
+    <string name="write_dialog_cancel">이 메모 작성을 취소하시겠습니까?</string>
     <string name="read_deleted">메모가 삭제되었습니다.</string>
+    <string name="read_dialog_delete">정말 이 메모를 삭제하시겠습니까?</string>
     <string name="search_label">검색</string>
     <string name="search_query_hint">검색할 단어를 쓰세요.</string>
+    <string name="dialog_yes">예</string>
+    <string name="dialog_no">아니요</string>
+    <string name="dialog_ok">확인</string>
+    <string name="dialog_cancel">취소</string>
+    <string name="error_empty_box">비어있는 칸이 있습니다!</string>
+    <string name="error_empty_query">단어가 비어있습니다!</string>
     <string name="error_image_not_found">이미지가 존재하지 않습니다!</string>
 </resources>

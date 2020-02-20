@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rulyox.linechallengememo.R
@@ -63,8 +64,12 @@ class SearchActivity: AppCompatActivity() {
     private fun initUI() {
 
         search_button_search.setOnClickListener{
+
             searchQuery = search_edit_query.text.toString()
+
             if(searchQuery != "") getMemoList(searchQuery)
+            else Toast.makeText(this, R.string.error_empty_query, Toast.LENGTH_SHORT).show()
+
         }
 
         // recycler view
@@ -86,7 +91,7 @@ class SearchActivity: AppCompatActivity() {
     // onclick recycler view memo
     fun clickMemo(id: Int) {
 
-        val readIntent = Intent(this@SearchActivity, ReadActivity::class.java)
+        val readIntent = Intent(this, ReadActivity::class.java)
         readIntent.putExtra("id", id)
         startActivityForResult(readIntent, INTENT_READ)
 
