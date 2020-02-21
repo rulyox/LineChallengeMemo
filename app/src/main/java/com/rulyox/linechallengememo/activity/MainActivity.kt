@@ -37,6 +37,11 @@ class MainActivity: AppCompatActivity() {
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        appRepository.closeDB()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true

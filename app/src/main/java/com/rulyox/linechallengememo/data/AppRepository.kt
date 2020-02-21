@@ -5,9 +5,9 @@ import kotlinx.coroutines.runBlocking
 
 class AppRepository(application: Application) {
 
-    private val database = AppDatabase.getInstance(application)
-    private val memoDao = database.memoDao()
-    private val imageDao = database.imageDao()
+    private val appDatabase = AppDatabase.getInstance(application)
+    private val memoDao = appDatabase.memoDao()
+    private val imageDao = appDatabase.imageDao()
 
     fun getAllMemo(): List<Memo> = runBlocking { memoDao.selectAll() }
 
@@ -28,5 +28,7 @@ class AppRepository(application: Application) {
     fun getThumbnailByMemo(memoId: Int): String? = runBlocking { imageDao.selectThumbnailByMemo(memoId) }
 
     fun deleteImage(image: Image) = runBlocking { imageDao.delete(image) }
+
+    fun closeDB() { appDatabase.close() }
 
 }
