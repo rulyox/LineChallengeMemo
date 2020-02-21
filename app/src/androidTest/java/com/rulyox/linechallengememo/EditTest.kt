@@ -32,7 +32,7 @@ class EditTest {
 
         onView(withId(R.id.write_edit_title))
             .perform(click())
-            .perform(typeText(" edited"), closeSoftKeyboard())
+            .perform(replaceText("Edited title"), closeSoftKeyboard())
 
         onView(withId(R.id.write_menu_save))
             .perform(click())

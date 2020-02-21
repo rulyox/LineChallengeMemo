@@ -82,10 +82,9 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
 
     fun getImageGallery() {
 
-        val pickIntent = Intent(Intent.ACTION_GET_CONTENT)
-        pickIntent.type = "image/*"
-
-        startActivityForResult(pickIntent, INTENT_GALLERY)
+        val galleryIntent = Intent(Intent.ACTION_GET_CONTENT)
+        galleryIntent.type = "image/*"
+        startActivityForResult(galleryIntent, INTENT_GALLERY)
 
     }
 
@@ -104,12 +103,11 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
     fun getImageCamera() {
 
         val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_camera.jpg")
+        val imgUri: Uri = FileProvider.getUriForFile(this, "com.rulyox.linechallengememo.fileprovider", imgFile)
 
-        val photoURI: Uri = FileProvider.getUriForFile(this, "com.rulyox.linechallengememo.fileprovider", imgFile)
-
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-        startActivityForResult(takePictureIntent, INTENT_CAMERA)
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri)
+        startActivityForResult(cameraIntent, INTENT_CAMERA)
 
     }
 

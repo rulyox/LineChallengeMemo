@@ -1,23 +1,81 @@
 package com.rulyox.linechallengememo
 
+import android.app.Activity
+import android.app.Instrumentation.ActivityResult
+import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.provider.MediaStore
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.intent.Intents.intending
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
+import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import androidx.test.rule.ActivityTestRule
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.runner.intent.IntentMonitorRegistry
 import com.rulyox.linechallengememo.activity.MainActivity
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.io.OutputStream
 
 @RunWith(AndroidJUnit4::class)
-@LargeTest
 class CreateTest {
 
     @Rule
     @JvmField
-    var mainActivityTestRule = ActivityTestRule(MainActivity::class.java)
+    var mainActivityTestRule = IntentsTestRule(MainActivity::class.java)
+
+    @Before
+    fun beforeTest() {
+
+        // gallery intent handler
+        val galleryIntentStub = {
+
+            val imgBmp = BitmapFactory.decodeResource(mainActivityTestRule.activity.resources, R.drawable.ic_gallery)
+            val imgPath = MediaStore.Images.Media.insertImage(mainActivityTestRule.activity.contentResolver, imgBmp, null, null)
+            val imgUri = Uri.parse(imgPath.toString())
+
+            val resultData = Intent()
+            resultData.data = imgUri
+
+            ActivityResult(Activity.RESULT_OK, resultData)
+
+        }
+
+        // gallery intent needs result data as intent
+        intending(hasAction(Intent.ACTION_GET_CONTENT)).respondWith(galleryIntentStub())
+
+        // camerae intent handler
+        IntentMonitorRegistry.getInstance().addIntentCallback{ intent ->
+
+            val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
+
+            if (intent.action == MediaStore.ACTION_IMAGE_CAPTURE) {
+
+                val imgUri: Uri = intent.getParcelableExtra(MediaStore.EXTRA_OUTPUT)!!
+                val outputStream: OutputStream = context.contentResolver.openOutputStream(imgUri)!!
+
+                val imgBmp: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_camera)
+                imgBmp.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+
+                outputStream.flush()
+                outputStream.close()
+
+            }
+
+        }
+
+        // camera intent doesn't need result data, needs to save image to MediaStore.EXTRA_OUTPUT
+        intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(ActivityResult(Activity.RESULT_OK, null))
+
+    }
 
     @Test
     fun createMemo() {
@@ -26,11 +84,17 @@ class CreateTest {
             .perform(click())
 
         onView(withId(R.id.write_edit_title))
-            .perform(typeText("Test title"), closeSoftKeyboard())
+            .perform(replaceText("Test title"), closeSoftKeyboard())
 
         onView(withId(R.id.write_edit_text))
             .perform(click())
-            .perform(typeText("This is text for test."), closeSoftKeyboard())
+            .perform(replaceText("This is text for test."), closeSoftKeyboard())
+
+        onView(withId(R.id.write_menu_gallery))
+            .perform(click())
+
+        onView(withId(R.id.write_menu_camera))
+            .perform(click())
 
         onView(withId(R.id.write_menu_save))
             .perform(click())
