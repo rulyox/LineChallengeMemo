@@ -104,8 +104,8 @@ class ReadActivity: AppCompatActivity() {
 
         val memo: Memo = appRepository.getMemoById(memoId)
 
-        read_edit_title.text = memo.title
-        read_edit_text.text = memo.text
+        read_text_title.text = memo.title
+        read_text_text.text = memo.text
 
         // get timestamp from database time
         val calendar: Calendar = Calendar.getInstance()

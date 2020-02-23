@@ -8,25 +8,32 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
+import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.NoMatchingViewException
+import androidx.test.espresso.ViewAssertion
 import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.espresso.intent.rule.IntentsTestRule
-import androidx.test.espresso.matcher.ViewMatchers.withClassName
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.intent.IntentMonitorRegistry
 import com.rulyox.linechallengememo.activity.AbstractWriteActivity.Companion.writeCountingIdlingResource
 import com.rulyox.linechallengememo.activity.MainActivity
+import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.endsWith
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.OutputStream
+
 
 @RunWith(AndroidJUnit4::class)
 class CreateTest {
@@ -124,6 +131,36 @@ class CreateTest {
         // save button
         onView(withId(R.id.write_menu_save))
             .perform(click())
+
+        // choose first item of recycler view
+        onView(withId(R.id.main_recycler_memo))
+            .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+
+        // check text
+        onView(withId(R.id.read_text_title))
+            .check(matches(withText("Test title")))
+
+        onView(withId(R.id.read_text_text))
+            .check(matches(withText("This is text for test.")))
+
+        // check images
+        onView(withId(R.id.read_recycler_image))
+            .check(RecyclerViewItemCountAssertion(3))
+
+    }
+
+    class RecyclerViewItemCountAssertion(private val expectedCount: Int): ViewAssertion {
+
+        override fun check(view: View, noViewFoundException: NoMatchingViewException?) {
+
+            if (noViewFoundException != null) throw noViewFoundException
+
+            val recyclerView = view as RecyclerView
+            val adapter = recyclerView.adapter
+
+            assertThat(adapter!!.itemCount, `is`(expectedCount))
+
+        }
 
     }
 
