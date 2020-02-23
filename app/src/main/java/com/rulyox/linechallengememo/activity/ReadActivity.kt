@@ -107,6 +107,7 @@ class ReadActivity: AppCompatActivity() {
         read_edit_title.text = memo.title
         read_edit_text.text = memo.text
 
+        // get timestamp from database time
         val calendar: Calendar = Calendar.getInstance()
         calendar.timeInMillis = memo.time
         val timestamp = calendar.get(Calendar.YEAR).toString() + ". " +

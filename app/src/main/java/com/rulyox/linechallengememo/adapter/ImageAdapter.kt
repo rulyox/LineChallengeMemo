@@ -11,13 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rulyox.linechallengememo.R
 import com.rulyox.linechallengememo.activity.AbstractWriteActivity
 import com.rulyox.linechallengememo.activity.ReadActivity
-import java.lang.ref.WeakReference
 
-class ImageAdapter(private val drawableList: List<Drawable>, context: Context): RecyclerView.Adapter<ImageAdapter.CustomViewHolder?>() {
+class ImageAdapter(private val drawableList: List<Drawable>, private val context: Context): RecyclerView.Adapter<ImageAdapter.CustomViewHolder?>() {
 
-    private val contextWeakReference = WeakReference(context)
-
-    inner class CustomViewHolder(view: View, val context: Context): RecyclerView.ViewHolder(view) {
+    inner class CustomViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
         val image: ImageView = view.findViewById(R.id.item_image_image)
 
@@ -30,10 +27,9 @@ class ImageAdapter(private val drawableList: List<Drawable>, context: Context): 
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): CustomViewHolder {
 
-        val context: Context = contextWeakReference.get()!!
         val view: View = LayoutInflater.from(viewGroup.context).inflate(R.layout.item_image, viewGroup, false)
 
-        return CustomViewHolder(view, context)
+        return CustomViewHolder(view)
 
     }
 
@@ -42,7 +38,7 @@ class ImageAdapter(private val drawableList: List<Drawable>, context: Context): 
         viewholder.image.setImageDrawable(drawableList[position])
 
         // image view round corners
-        val roundCorner = viewholder.context.getDrawable(R.drawable.bg_round_corner) as GradientDrawable
+        val roundCorner = context.getDrawable(R.drawable.bg_round_corner) as GradientDrawable
         viewholder.image.background = roundCorner
         viewholder.image.clipToOutline = true
 
