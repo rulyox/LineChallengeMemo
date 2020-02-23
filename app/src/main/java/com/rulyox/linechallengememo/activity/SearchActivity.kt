@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -81,10 +82,22 @@ class SearchActivity: AppCompatActivity() {
 
         val memoList: List<Memo> = appRepository.getMemoByQuery(query)
 
-        // recycler view adapter
-        val memoAdapter = MemoAdapter(memoList, this)
-        search_recycler_memo.adapter = memoAdapter
-        memoAdapter.notifyDataSetChanged()
+        if(memoList.isNotEmpty()) {
+
+            search_text_empty.visibility = View.GONE
+            search_recycler_memo.visibility = View.VISIBLE
+
+            // recycler view adapter
+            val memoAdapter = MemoAdapter(memoList, this)
+            search_recycler_memo.adapter = memoAdapter
+            memoAdapter.notifyDataSetChanged()
+
+        } else {
+
+            search_text_empty.visibility = View.VISIBLE
+            search_recycler_memo.visibility = View.GONE
+
+        }
 
     }
 

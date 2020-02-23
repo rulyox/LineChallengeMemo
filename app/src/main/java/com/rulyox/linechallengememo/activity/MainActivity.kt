@@ -95,17 +95,17 @@ class MainActivity: AppCompatActivity() {
             main_text_empty.visibility = View.GONE
             main_recycler_memo.visibility = View.VISIBLE
 
+            // recycler view adapter
+            val memoAdapter = MemoAdapter(memoList, this)
+            main_recycler_memo.adapter = memoAdapter
+            memoAdapter.notifyDataSetChanged()
+
         } else {
 
             main_text_empty.visibility = View.VISIBLE
             main_recycler_memo.visibility = View.GONE
 
         }
-
-        // recycler view adapter
-        val memoAdapter = MemoAdapter(memoList, this)
-        main_recycler_memo.adapter = memoAdapter
-        memoAdapter.notifyDataSetChanged()
 
     }
 

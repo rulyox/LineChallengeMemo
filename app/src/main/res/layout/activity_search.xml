@@ -73,10 +73,20 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/search_text_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/search_empty_result"
+            android:fontFamily="@font/nanum_gothic_bold"
+            android:textSize="23sp" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/search_recycler_memo"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:visibility="gone" />
 
     </LinearLayout>
 

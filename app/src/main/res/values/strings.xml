@@ -25,6 +25,7 @@
     <string name="read_deleted">Memo deleted.</string>
     <string name="search_label">Search</string>
     <string name="search_query_hint">Write text to search.</string>
+    <string name="search_empty_result">Search result is empty.</string>
     <string name="dialog_yes">Yes</string>
     <string name="dialog_no">No</string>
     <string name="dialog_ok">OK</string>
