@@ -1,6 +1,7 @@
 package com.rulyox.linechallengememo.activity
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -162,6 +163,12 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
 
             val url: String = editText.text.toString()
 
+            val progressDialog = ProgressDialog(this@AbstractWriteActivity)
+            progressDialog.setMessage(resources.getString(R.string.write_downloading_image))
+            progressDialog.setCancelable(false)
+            progressDialog.setProgressStyle(android.R.style.Widget_ProgressBar_Horizontal)
+            progressDialog.show()
+
             // download image in new thread
             GlobalScope.launch {
 
@@ -185,6 +192,8 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
                     }
 
                 }
+
+                progressDialog.dismiss()
 
                 writeCountingIdlingResource.decrement()
 

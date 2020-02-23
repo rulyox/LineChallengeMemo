@@ -19,6 +19,7 @@
     <string name="write_dialog_delete">Delete Image</string>
     <string name="write_dialog_internet">Get image from internet</string>
     <string name="write_dialog_url">Enter URL here.</string>
+    <string name="write_downloading_image">Downloading image&#8230;</string>
     <string name="write_dialog_cancel">Will you cancel writing this memo?</string>
     <string name="write_canceled">Memo writing canceled.</string>
     <string name="read_dialog_delete">Are you sure to delete this memo?</string>

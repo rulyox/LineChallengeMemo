@@ -17,6 +17,7 @@
     <string name="write_dialog_delete">이미지 삭제</string>
     <string name="write_dialog_internet">인터넷에서 이미지 가져오기</string>
     <string name="write_dialog_url">여기에 URL을 입력하세요.</string>
+    <string name="write_downloading_image">이미지 다운로드 중&#8230;</string>
     <string name="write_dialog_cancel">이 메모 작성을 취소하시겠습니까?</string>
     <string name="write_canceled">작성 중이던 메모가 취소되었습니다.</string>
     <string name="read_dialog_delete">정말 이 메모를 삭제하시겠습니까?</string>
