@@ -78,11 +78,15 @@ class ReadActivity: AppCompatActivity() {
 
         if(resultCode == Activity.RESULT_OK) {
 
-            val doRefresh = data?.getBooleanExtra("refresh", false)
+            if(requestCode == INTENT_EDIT) {
 
-            if(doRefresh != null && doRefresh) {
-                getMemoData()
-                setRefresh()
+                val doRefresh = data?.getBooleanExtra("refresh", false)
+
+                if(doRefresh != null && doRefresh) {
+                    getMemoData()
+                    setRefresh()
+                }
+
             }
 
         }
@@ -183,6 +187,7 @@ class ReadActivity: AppCompatActivity() {
 
     }
 
+    // image recycler view listen onclick
     fun clickImage(position: Int) {
 
         val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${imgList[position].file}.jpg")
@@ -199,6 +204,7 @@ class ReadActivity: AppCompatActivity() {
 
     }
 
+    // refresh after this activity finishes
     private fun setRefresh() {
 
         val finishIntent = Intent()

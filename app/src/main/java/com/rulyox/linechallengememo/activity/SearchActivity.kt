@@ -51,11 +51,15 @@ class SearchActivity: AppCompatActivity() {
 
         if(resultCode == Activity.RESULT_OK) {
 
-            val doRefresh = data?.getBooleanExtra("refresh", false)
+            if(requestCode == INTENT_READ) {
 
-            if(doRefresh != null && doRefresh) {
-                getMemoList(searchQuery)
-                setRefresh()
+                val doRefresh = data?.getBooleanExtra("refresh", false)
+
+                if(doRefresh != null && doRefresh) {
+                    getMemoList(searchQuery)
+                    setRefresh()
+                }
+
             }
 
         }
@@ -64,6 +68,7 @@ class SearchActivity: AppCompatActivity() {
 
     private fun initUI() {
 
+        // search button
         search_button_search.setOnClickListener{
 
             searchQuery = search_edit_query.text.toString()
@@ -101,7 +106,7 @@ class SearchActivity: AppCompatActivity() {
 
     }
 
-    // onclick recycler view memo
+    // memo recycler view listen onclick
     fun clickMemo(id: Int) {
 
         val readIntent = Intent(this, ReadActivity::class.java)
@@ -110,6 +115,7 @@ class SearchActivity: AppCompatActivity() {
 
     }
 
+    // refresh after this activity finishes
     private fun setRefresh() {
 
         val finishIntent = Intent()

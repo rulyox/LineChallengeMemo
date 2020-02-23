@@ -87,6 +87,7 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
 
     }
 
+    // start intent to choose image from gallery
     fun getImageGallery() {
 
         val galleryIntent = Intent(Intent.ACTION_GET_CONTENT)
@@ -95,6 +96,7 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
 
     }
 
+    // get intent result after choosing image from gallery
     private fun gotImageGallery(data: Intent) {
 
         val imgUri: Uri = data.data!!
@@ -103,10 +105,11 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
         imgStream.close()
 
         imgDrawableList.add(imgDrawable)
-        updateRecycler()
+        updateImageRecycler()
 
     }
 
+    // start intent to take a picture
     fun getImageCamera() {
 
         val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_camera.jpg")
@@ -118,6 +121,7 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
 
     }
 
+    // get intent result after taking a picture
     private fun gotImageCamera() {
 
         val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_camera.jpg")
@@ -128,7 +132,7 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
             val imgDrawable: Drawable = Drawable.createFromPath(imgPath)!!
 
             imgDrawableList.add(imgDrawable)
-            updateRecycler()
+            updateImageRecycler()
 
             imgFile.delete()
 
@@ -136,6 +140,7 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
 
     }
 
+    // get image from internet
     fun getImageUrl() {
 
         val dpi: Float = resources.displayMetrics.density
@@ -170,7 +175,7 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
                     // update view in main thread
                     runOnUiThread {
                         imgDrawableList.add(imgDrawable)
-                        updateRecycler()
+                        updateImageRecycler()
                     }
 
                 } catch(error: Exception) { // handle url or image error
@@ -193,7 +198,7 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
 
     }
 
-    fun updateRecycler() {
+    fun updateImageRecycler() {
 
         if(imgDrawableList.size > 0) write_recycler_image.visibility = View.VISIBLE
         else write_recycler_image.visibility = View.GONE
@@ -204,6 +209,7 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
 
     }
 
+    // save image in memo to file
     fun saveDrawable(imgDrawable: Drawable, memoId: Int, index: Int): String {
 
         val imgName = "img_${memoId}_${index}"
@@ -262,6 +268,7 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
 
     }
 
+    // refresh after this activity finishes
     fun setRefresh() {
 
         val finishIntent = Intent()

@@ -30,7 +30,7 @@
     <string name="dialog_no">No</string>
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
-    <string name="error_empty_box">There is a empty box!</string>
+    <string name="error_empty_memo">Memo is empty!</string>
     <string name="error_empty_query">Query is empty!</string>
     <string name="error_url">URL is wrong or there is no internet connection!</string>
     <string name="error_image_not_found">Image is not found!</string>

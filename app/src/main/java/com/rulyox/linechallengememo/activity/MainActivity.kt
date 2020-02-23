@@ -63,9 +63,13 @@ class MainActivity: AppCompatActivity() {
 
         if(resultCode == Activity.RESULT_OK) {
 
-            val doRefresh = data?.getBooleanExtra("refresh", false)
+            if(requestCode == INTENT_CREATE || requestCode == INTENT_READ || requestCode == INTENT_SEARCH) {
 
-            if(doRefresh != null && doRefresh) getMemoList()
+                val doRefresh = data?.getBooleanExtra("refresh", false)
+
+                if(doRefresh != null && doRefresh) getMemoList()
+
+            }
 
         }
 
@@ -109,7 +113,7 @@ class MainActivity: AppCompatActivity() {
 
     }
 
-    // onclick recycler view memo
+    // memo recycler view listen onclick
     fun clickMemo(id: Int) {
 
         val readIntent = Intent(this, ReadActivity::class.java)

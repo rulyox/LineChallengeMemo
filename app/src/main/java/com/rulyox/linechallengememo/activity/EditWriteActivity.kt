@@ -94,12 +94,13 @@ class EditWriteActivity: AbstractWriteActivity() {
 
             }
 
-            updateRecycler()
+            updateImageRecycler()
 
         }
 
     }
 
+    // image recycler view listen onclick
     override fun clickImage(position: Int) {
 
         val alertDialogBuilder = AlertDialog.Builder(this)
@@ -160,7 +161,7 @@ class EditWriteActivity: AbstractWriteActivity() {
     override fun deleteImage(position: Int) {
 
         imgDrawableList.removeAt(position)
-        updateRecycler()
+        updateImageRecycler()
 
         // add to deletedImgList
         if(existedImgList.size > position) {
@@ -176,8 +177,8 @@ class EditWriteActivity: AbstractWriteActivity() {
         val memoText: String = write_edit_text.text.toString()
 
         // if empty
-        if(memoTitle == "" || memoText == "") {
-            Toast.makeText(this, R.string.error_empty_box, Toast.LENGTH_SHORT).show()
+        if(memoTitle == "" && memoText == "" && imgDrawableList.isEmpty()) {
+            Toast.makeText(this, R.string.error_empty_memo, Toast.LENGTH_SHORT).show()
             return
         }
 

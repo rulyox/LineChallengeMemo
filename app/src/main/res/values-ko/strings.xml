@@ -28,7 +28,7 @@
     <string name="dialog_no">아니요</string>
     <string name="dialog_ok">확인</string>
     <string name="dialog_cancel">취소</string>
-    <string name="error_empty_box">비어있는 칸이 있습니다!</string>
+    <string name="error_empty_memo">메모가 비어있습니다!</string>
     <string name="error_empty_query">단어가 비어있습니다!</string>
     <string name="error_url">URL이 잘못되었거나 인터넷 연결에 문제가 있습니다!</string>
     <string name="error_image_not_found">이미지가 존재하지 않습니다!</string>
