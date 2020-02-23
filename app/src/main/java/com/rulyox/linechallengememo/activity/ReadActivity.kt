@@ -54,7 +54,7 @@ class ReadActivity: AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+        return when(item.itemId) {
             android.R.id.home -> {
                 finish()
                 true
@@ -112,7 +112,7 @@ class ReadActivity: AppCompatActivity() {
         calendar.timeInMillis = memo.time
         val timestamp = calendar.get(Calendar.YEAR).toString() + ". " +
                 (if(calendar.get(Calendar.MONTH)+1 < 10) "0" + (calendar.get(Calendar.MONTH)+1).toString() else (calendar.get(Calendar.MONTH)+1).toString()) + ". " +
-                (if(calendar.get(Calendar.DATE) < 10) "0" + calendar.get(Calendar.DATE).toString() else calendar.get(Calendar.DATE).toString()) + ".  " +
+                (if(calendar.get(Calendar.DATE) < 10) "0" + calendar.get(Calendar.DATE).toString() else calendar.get(Calendar.DATE).toString()) + ". " +
                 (if(calendar.get(Calendar.HOUR_OF_DAY) < 10) "0" + calendar.get(Calendar.HOUR_OF_DAY).toString() else calendar.get(Calendar.HOUR_OF_DAY).toString()) + ":" +
                 (if(calendar.get(Calendar.MINUTE) < 10) "0" + calendar.get(Calendar.MINUTE).toString() else calendar.get(Calendar.MINUTE).toString())
         read_text_label.text = timestamp

@@ -25,11 +25,11 @@ class MemoAdapter(private val memoList: List<Memo>, private val context: Context
 
     inner class CustomViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
-        private val parent: LinearLayout = view.findViewById(R.id.item_parent)
-        val title: TextView = view.findViewById(R.id.item_title)
-        val text: TextView = view.findViewById(R.id.item_text)
-        val time: TextView = view.findViewById(R.id.item_time)
-        val thumb: ImageView = view.findViewById(R.id.item_thumb)
+        private val parent: LinearLayout = view.findViewById(R.id.item_memo_parent)
+        val title: TextView = view.findViewById(R.id.item_memo_title)
+        val text: TextView = view.findViewById(R.id.item_memo_text)
+        val time: TextView = view.findViewById(R.id.item_memo_time)
+        val thumb: ImageView = view.findViewById(R.id.item_memo_thumb)
 
         init {
             if(context is MainActivity) parent.setOnClickListener{ context.clickMemo(memoList[adapterPosition].id!!) }
@@ -59,7 +59,7 @@ class MemoAdapter(private val memoList: List<Memo>, private val context: Context
         calendar.timeInMillis = memoList[position].time
         val timestamp = calendar.get(Calendar.YEAR).toString() + ". " +
                 (if(calendar.get(Calendar.MONTH)+1 < 10) "0" + (calendar.get(Calendar.MONTH)+1).toString() else (calendar.get(Calendar.MONTH)+1).toString()) + ". " +
-                (if(calendar.get(Calendar.DATE) < 10) "0" + calendar.get(Calendar.DATE).toString() else calendar.get(Calendar.DATE).toString()) + ".  " +
+                (if(calendar.get(Calendar.DATE) < 10) "0" + calendar.get(Calendar.DATE).toString() else calendar.get(Calendar.DATE).toString()) + ". " +
                 (if(calendar.get(Calendar.HOUR_OF_DAY) < 10) "0" + calendar.get(Calendar.HOUR_OF_DAY).toString() else calendar.get(Calendar.HOUR_OF_DAY).toString()) + ":" +
                 (if(calendar.get(Calendar.MINUTE) < 10) "0" + calendar.get(Calendar.MINUTE).toString() else calendar.get(Calendar.MINUTE).toString())
         viewholder.time.text = timestamp

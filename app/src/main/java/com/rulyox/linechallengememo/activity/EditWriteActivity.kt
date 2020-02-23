@@ -50,9 +50,9 @@ class EditWriteActivity: AbstractWriteActivity() {
         // navigation view
         write_navigation_image.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
-                R.id.write_menu_gallery -> { getImageGallery() }
-                R.id.write_menu_camera -> { getImageCamera() }
-                R.id.write_menu_url -> { getImageUrl() }
+                R.id.write_menu_gallery -> getImageGallery()
+                R.id.write_menu_camera -> getImageCamera()
+                R.id.write_menu_url -> getImageUrl()
             }
             true
         }

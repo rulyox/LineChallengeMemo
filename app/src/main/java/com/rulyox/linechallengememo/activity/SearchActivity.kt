@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,7 +38,7 @@ class SearchActivity: AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+        return when(item.itemId) {
             android.R.id.home -> {
                 finish()
                 true
@@ -69,17 +70,27 @@ class SearchActivity: AppCompatActivity() {
     private fun initUI() {
 
         // search button
-        search_button_search.setOnClickListener{
+        search_button_search.setOnClickListener{ search() }
 
-            searchQuery = search_edit_query.text.toString()
+        search_edit_query.setOnEditorActionListener { _, actionId, _ ->
+            when(actionId) {
+                EditorInfo.IME_ACTION_SEARCH -> search()
+            }
 
-            if(searchQuery != "") getMemoList(searchQuery)
-            else Toast.makeText(this, R.string.error_empty_query, Toast.LENGTH_SHORT).show()
-
+            true
         }
 
         // recycler view
         search_recycler_memo.layoutManager = LinearLayoutManager(this)
+
+    }
+
+    private fun search() {
+
+        searchQuery = search_edit_query.text.toString()
+
+        if(searchQuery != "") getMemoList(searchQuery)
+        else Toast.makeText(this, R.string.error_empty_query, Toast.LENGTH_SHORT).show()
 
     }
 
