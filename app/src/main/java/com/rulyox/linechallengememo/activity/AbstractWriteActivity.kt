@@ -8,13 +8,18 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
-import android.view.*
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.test.espresso.idling.CountingIdlingResource
 import com.rulyox.linechallengememo.R
 import com.rulyox.linechallengememo.adapter.ImageAdapter
 import kotlinx.android.synthetic.main.activity_write.*
@@ -23,7 +28,6 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
-import java.lang.Exception
 import java.net.URL
 
 abstract class AbstractWriteActivity: AppCompatActivity() {
@@ -33,6 +37,9 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
     companion object {
         const val INTENT_GALLERY = 1
         const val INTENT_CAMERA = 2
+
+        @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+        val writeCountingIdlingResource: CountingIdlingResource = CountingIdlingResource("IDLE_RESOURCE_WRITE")
     }
 
     abstract fun initUI()
@@ -153,6 +160,8 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
             // download image in new thread
             GlobalScope.launch {
 
+                writeCountingIdlingResource.increment()
+
                 try {
 
                     val inputStream = URL(url).content as InputStream
@@ -171,6 +180,8 @@ abstract class AbstractWriteActivity: AppCompatActivity() {
                     }
 
                 }
+
+                writeCountingIdlingResource.decrement()
 
             }
 

@@ -9,16 +9,19 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.espresso.intent.rule.IntentsTestRule
+import androidx.test.espresso.matcher.ViewMatchers.withClassName
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.intent.IntentMonitorRegistry
+import com.rulyox.linechallengememo.activity.AbstractWriteActivity.Companion.writeCountingIdlingResource
 import com.rulyox.linechallengememo.activity.MainActivity
+import org.hamcrest.CoreMatchers.endsWith
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -28,14 +31,12 @@ import java.io.OutputStream
 @RunWith(AndroidJUnit4::class)
 class CreateTest {
 
-    @Rule
-    @JvmField
-    var mainActivityTestRule = IntentsTestRule(MainActivity::class.java)
+    @get:Rule
+    val mainActivityTestRule = IntentsTestRule(MainActivity::class.java)
 
     @Before
-    fun beforeTest() {
+    fun galleryHandler() {
 
-        // gallery intent handler
         val galleryIntentStub = {
 
             val imgBmp = BitmapFactory.decodeResource(mainActivityTestRule.activity.resources, R.drawable.ic_gallery)
@@ -52,7 +53,11 @@ class CreateTest {
         // gallery intent needs result data as intent
         intending(hasAction(Intent.ACTION_GET_CONTENT)).respondWith(galleryIntentStub())
 
-        // camerae intent handler
+    }
+
+    @Before
+    fun cameraHandler() {
+
         IntentMonitorRegistry.getInstance().addIntentCallback{ intent ->
 
             val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -77,12 +82,22 @@ class CreateTest {
 
     }
 
+    @Before
+    fun registerIdlingResource() {
+
+        // getting image from url uses coroutine
+        IdlingRegistry.getInstance().register(writeCountingIdlingResource)
+
+    }
+
     @Test
     fun createMemo() {
 
+        // add activity
         onView(withId(R.id.main_button_add))
             .perform(click())
 
+        // add text
         onView(withId(R.id.write_edit_title))
             .perform(replaceText("Test title"), closeSoftKeyboard())
 
@@ -90,12 +105,23 @@ class CreateTest {
             .perform(click())
             .perform(replaceText("This is text for test."), closeSoftKeyboard())
 
+        // add images
         onView(withId(R.id.write_menu_gallery))
             .perform(click())
 
         onView(withId(R.id.write_menu_camera))
             .perform(click())
 
+        onView(withId(R.id.write_menu_url))
+            .perform(click())
+
+        onView(withClassName(endsWith("EditText")))
+            .perform(replaceText("https://developer.android.com/images/brand/Android_Robot.png"))
+
+        onView(withId(android.R.id.button1)) // dialog positive button
+            .perform(click())
+
+        // save button
         onView(withId(R.id.write_menu_save))
             .perform(click())
 
