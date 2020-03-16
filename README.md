@@ -14,3 +14,8 @@ https://programmers.co.kr/competitions/139/2020-line-recruitment
 * Images can be from gallery, camera, internet
 * Edit and delete memo
 * Search memo
+
+
+## Programmers Feedback
+
+![Feedback](./feedback.png)
